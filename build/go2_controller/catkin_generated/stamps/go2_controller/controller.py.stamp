@@ -38,25 +38,29 @@
 
 import rospy
 from std_msgs.msg import String
-from unitree_legged_msgs import HighCmd
+from unitree_legged_msgs.msg import HighCmd
 
 
 def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
+    rospy.loginfo(
+        "V_x = %f, V_y = %f, Yaw_speed = %f", 
+        data.velocity[0], data.velocity[1], data.yawSpeed
+    )
 
-def listener():
+
+def controller():
 
     # In ROS, nodes are uniquely named. If two nodes with the same
     # name are launched, the previous one is kicked off. The
     # anonymous=True flag means that rospy will choose a unique
     # name for our 'listener' node so that multiple listeners can
     # run simultaneously.
-    rospy.init_node('listener', anonymous=True)
-
-    rospy.Subscriber('chatter', String, callback)
+    rospy.init_node('controller', anonymous=True)
+    rospy.loginfo('controller_start')
+    rospy.Subscriber('unitree_highcmd', HighCmd, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 
 if __name__ == '__main__':
-    listener()
+    controller()
