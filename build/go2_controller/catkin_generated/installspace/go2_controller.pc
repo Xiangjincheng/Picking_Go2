@@ -1,0 +1,8 @@
+prefix=/home/cheng/unitree_noetic/install
+
+Name: go2_controller
+Description: Description of go2_controller
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: roscpp rospy std_msgs unitree_legged_msgs
