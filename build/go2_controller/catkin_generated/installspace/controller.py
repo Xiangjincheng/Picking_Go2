@@ -53,8 +53,8 @@ class ControllerNode:
         rospy.spin()
 
 if __name__ == '__main__':
-    # ChannelFactoryInitialize(0, 'enp2s0') #改称网口名字
-    # time.sleep(1)
+    ChannelFactoryInitialize(0, 'enp2s0') #改称网口名字
+    time.sleep(1)
 
     controller_node = ControllerNode()
     try:

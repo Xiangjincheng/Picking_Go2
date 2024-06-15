@@ -90,7 +90,6 @@ clean: go2_controller/clean
 
 # Recursive "all" directory target.
 go2_controller/all: go2_controller/CMakeFiles/go2_controller_generate_messages.dir/all
-go2_controller/all: go2_controller/CMakeFiles/ctrl.dir/all
 .PHONY : go2_controller/all
 
 # Recursive "preinstall" directory target.
@@ -115,7 +114,6 @@ go2_controller/clean: go2_controller/CMakeFiles/go2_controller_generate_messages
 go2_controller/clean: go2_controller/CMakeFiles/go2_controller_geneus.dir/clean
 go2_controller/clean: go2_controller/CMakeFiles/go2_controller_generate_messages_lisp.dir/clean
 go2_controller/clean: go2_controller/CMakeFiles/go2_controller_generate_messages_nodejs.dir/clean
-go2_controller/clean: go2_controller/CMakeFiles/ctrl.dir/clean
 go2_controller/clean: go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/clean
 go2_controller/clean: go2_controller/CMakeFiles/go2_controller_genlisp.dir/clean
 go2_controller/clean: go2_controller/CMakeFiles/go2_controller_gennodejs.dir/clean
@@ -360,7 +358,7 @@ gtest/googlemock/CMakeFiles/gmock_main.dir/all: gtest/googlemock/CMakeFiles/gmoc
 gtest/googlemock/CMakeFiles/gmock_main.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f gtest/googlemock/CMakeFiles/gmock_main.dir/build.make gtest/googlemock/CMakeFiles/gmock_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f gtest/googlemock/CMakeFiles/gmock_main.dir/build.make gtest/googlemock/CMakeFiles/gmock_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=5,6 "Built target gmock_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=3,4 "Built target gmock_main"
 .PHONY : gtest/googlemock/CMakeFiles/gmock_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -386,7 +384,7 @@ gtest/googlemock/CMakeFiles/gmock_main.dir/clean:
 gtest/googlemock/CMakeFiles/gmock.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f gtest/googlemock/CMakeFiles/gmock.dir/build.make gtest/googlemock/CMakeFiles/gmock.dir/depend
 	$(MAKE) $(MAKESILENT) -f gtest/googlemock/CMakeFiles/gmock.dir/build.make gtest/googlemock/CMakeFiles/gmock.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=3,4 "Built target gmock"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=1,2 "Built target gmock"
 .PHONY : gtest/googlemock/CMakeFiles/gmock.dir/all
 
 # Build rule for subdir invocation for target.
@@ -412,7 +410,7 @@ gtest/googlemock/CMakeFiles/gmock.dir/clean:
 gtest/googletest/CMakeFiles/gtest.dir/all:
 	$(MAKE) $(MAKESILENT) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/depend
 	$(MAKE) $(MAKESILENT) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=8,9 "Built target gtest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=6,7 "Built target gtest"
 .PHONY : gtest/googletest/CMakeFiles/gtest.dir/all
 
 # Build rule for subdir invocation for target.
@@ -438,7 +436,7 @@ gtest/googletest/CMakeFiles/gtest.dir/clean:
 gtest/googletest/CMakeFiles/gtest_main.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f gtest/googletest/CMakeFiles/gtest_main.dir/build.make gtest/googletest/CMakeFiles/gtest_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f gtest/googletest/CMakeFiles/gtest_main.dir/build.make gtest/googletest/CMakeFiles/gtest_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=10,11 "Built target gtest_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=8,9 "Built target gtest_main"
 .PHONY : gtest/googletest/CMakeFiles/gtest_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -477,7 +475,7 @@ unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_nodejs.dir/
 unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_nodejs.dir/all: unitree_legged_msgs/CMakeFiles/_unitree_legged_msgs_generate_messages_check_deps_Cartesian.dir/all
 	$(MAKE) $(MAKESILENT) -f unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_nodejs.dir/build.make unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_nodejs.dir/depend
 	$(MAKE) $(MAKESILENT) -f unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_nodejs.dir/build.make unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_nodejs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=46,47,48,49,50,51,52,53,54,55,56 "Built target unitree_legged_msgs_generate_messages_nodejs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=44,45,46,47,48,49,50,51,52,53,54 "Built target unitree_legged_msgs_generate_messages_nodejs"
 .PHONY : unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_nodejs.dir/all
 
 # Build rule for subdir invocation for target.
@@ -542,7 +540,7 @@ unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_lisp.dir/al
 unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_lisp.dir/all: unitree_legged_msgs/CMakeFiles/_unitree_legged_msgs_generate_messages_check_deps_Cartesian.dir/all
 	$(MAKE) $(MAKESILENT) -f unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_lisp.dir/build.make unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_lisp.dir/depend
 	$(MAKE) $(MAKESILENT) -f unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_lisp.dir/build.make unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_lisp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=35,36,37,38,39,40,41,42,43,44,45 "Built target unitree_legged_msgs_generate_messages_lisp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=33,34,35,36,37,38,39,40,41,42,43 "Built target unitree_legged_msgs_generate_messages_lisp"
 .PHONY : unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_lisp.dir/all
 
 # Build rule for subdir invocation for target.
@@ -581,7 +579,7 @@ unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_eus.dir/all
 unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_eus.dir/all: unitree_legged_msgs/CMakeFiles/_unitree_legged_msgs_generate_messages_check_deps_Cartesian.dir/all
 	$(MAKE) $(MAKESILENT) -f unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_eus.dir/build.make unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_eus.dir/depend
 	$(MAKE) $(MAKESILENT) -f unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_eus.dir/build.make unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_eus.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=23,24,25,26,27,28,29,30,31,32,33,34 "Built target unitree_legged_msgs_generate_messages_eus"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=21,22,23,24,25,26,27,28,29,30,31,32 "Built target unitree_legged_msgs_generate_messages_eus"
 .PHONY : unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_eus.dir/all
 
 # Build rule for subdir invocation for target.
@@ -646,7 +644,7 @@ unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_cpp.dir/all
 unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_cpp.dir/all: unitree_legged_msgs/CMakeFiles/_unitree_legged_msgs_generate_messages_check_deps_Cartesian.dir/all
 	$(MAKE) $(MAKESILENT) -f unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_cpp.dir/build.make unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_cpp.dir/depend
 	$(MAKE) $(MAKESILENT) -f unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_cpp.dir/build.make unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_cpp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=12,13,14,15,16,17,18,19,20,21,22 "Built target unitree_legged_msgs_generate_messages_cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=10,11,12,13,14,15,16,17,18,19,20 "Built target unitree_legged_msgs_generate_messages_cpp"
 .PHONY : unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_cpp.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1261,7 +1259,7 @@ unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_py.dir/all:
 unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_py.dir/all: unitree_legged_msgs/CMakeFiles/_unitree_legged_msgs_generate_messages_check_deps_Cartesian.dir/all
 	$(MAKE) $(MAKESILENT) -f unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_py.dir/build.make unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_py.dir/depend
 	$(MAKE) $(MAKESILENT) -f unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_py.dir/build.make unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_py.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=57,58,59,60,61,62,63,64,65,66,67,68 "Built target unitree_legged_msgs_generate_messages_py"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=55,56,57,58,59,60,61,62,63,64,65,66 "Built target unitree_legged_msgs_generate_messages_py"
 .PHONY : unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_py.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1863,7 +1861,7 @@ go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/clean:
 go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/all: unitree_legged_msgs/CMakeFiles/std_msgs_generate_messages_eus.dir/all
 	$(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/build.make go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/depend
 	$(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/build.make go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=7 "Built target go2_controller_generate_messages_eus"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=5 "Built target go2_controller_generate_messages_eus"
 .PHONY : go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1959,32 +1957,6 @@ go2_controller_generate_messages_nodejs: go2_controller/CMakeFiles/go2_controlle
 go2_controller/CMakeFiles/go2_controller_generate_messages_nodejs.dir/clean:
 	$(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_generate_messages_nodejs.dir/build.make go2_controller/CMakeFiles/go2_controller_generate_messages_nodejs.dir/clean
 .PHONY : go2_controller/CMakeFiles/go2_controller_generate_messages_nodejs.dir/clean
-
-#=============================================================================
-# Target rules for target go2_controller/CMakeFiles/ctrl.dir
-
-# All Build rule for target.
-go2_controller/CMakeFiles/ctrl.dir/all: unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_gencpp.dir/all
-	$(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/depend
-	$(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=1,2 "Built target ctrl"
-.PHONY : go2_controller/CMakeFiles/ctrl.dir/all
-
-# Build rule for subdir invocation for target.
-go2_controller/CMakeFiles/ctrl.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cheng/unitree_noetic/build/CMakeFiles 13
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/ctrl.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cheng/unitree_noetic/build/CMakeFiles 0
-.PHONY : go2_controller/CMakeFiles/ctrl.dir/rule
-
-# Convenience name for target.
-ctrl: go2_controller/CMakeFiles/ctrl.dir/rule
-.PHONY : ctrl
-
-# clean rule for target.
-go2_controller/CMakeFiles/ctrl.dir/clean:
-	$(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/clean
-.PHONY : go2_controller/CMakeFiles/ctrl.dir/clean
 
 #=============================================================================
 # Target rules for target go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir

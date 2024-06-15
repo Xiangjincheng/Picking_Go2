@@ -410,20 +410,6 @@ go2_controller_generate_messages_nodejs/fast:
 .PHONY : go2_controller_generate_messages_nodejs/fast
 
 # Convenience name for target.
-go2_controller/CMakeFiles/ctrl.dir/rule:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/ctrl.dir/rule
-.PHONY : go2_controller/CMakeFiles/ctrl.dir/rule
-
-# Convenience name for target.
-ctrl: go2_controller/CMakeFiles/ctrl.dir/rule
-.PHONY : ctrl
-
-# fast build rule for target.
-ctrl/fast:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/build
-.PHONY : ctrl/fast
-
-# Convenience name for target.
 go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
 	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
 .PHONY : go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
@@ -479,30 +465,6 @@ go2_controller_genpy/fast:
 	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_genpy.dir/build.make go2_controller/CMakeFiles/go2_controller_genpy.dir/build
 .PHONY : go2_controller_genpy/fast
 
-src/ctrl.o: src/ctrl.cpp.o
-.PHONY : src/ctrl.o
-
-# target to build an object file
-src/ctrl.cpp.o:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/src/ctrl.cpp.o
-.PHONY : src/ctrl.cpp.o
-
-src/ctrl.i: src/ctrl.cpp.i
-.PHONY : src/ctrl.i
-
-# target to preprocess a source file
-src/ctrl.cpp.i:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/src/ctrl.cpp.i
-.PHONY : src/ctrl.cpp.i
-
-src/ctrl.s: src/ctrl.cpp.s
-.PHONY : src/ctrl.s
-
-# target to generate assembly for a file
-src/ctrl.cpp.s:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/src/ctrl.cpp.s
-.PHONY : src/ctrl.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -537,10 +499,6 @@ help:
 	@echo "... rosgraph_msgs_generate_messages_lisp"
 	@echo "... rosgraph_msgs_generate_messages_nodejs"
 	@echo "... rosgraph_msgs_generate_messages_py"
-	@echo "... ctrl"
-	@echo "... src/ctrl.o"
-	@echo "... src/ctrl.i"
-	@echo "... src/ctrl.s"
 .PHONY : help
 
 

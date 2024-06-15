@@ -1004,19 +1004,6 @@ go2_controller_generate_messages_nodejs/fast:
 .PHONY : go2_controller_generate_messages_nodejs/fast
 
 #=============================================================================
-# Target rules for targets named ctrl
-
-# Build rule for target.
-ctrl: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ctrl
-.PHONY : ctrl
-
-# fast build rule for target.
-ctrl/fast:
-	$(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/build
-.PHONY : ctrl/fast
-
-#=============================================================================
 # Target rules for targets named roscpp_generate_messages_cpp
 
 # Build rule for target.
@@ -1145,7 +1132,6 @@ help:
 	@echo "... unitree_legged_msgs_genlisp"
 	@echo "... unitree_legged_msgs_gennodejs"
 	@echo "... unitree_legged_msgs_genpy"
-	@echo "... ctrl"
 	@echo "... gmock"
 	@echo "... gmock_main"
 	@echo "... gtest"
