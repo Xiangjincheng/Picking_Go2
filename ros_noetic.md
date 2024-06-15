@@ -2,7 +2,7 @@
 
 ### Build
 
-- [Ros_Noettic_Pack](deb_loongnix/ros_catkin_ws_loongarch.tar.gz)  use this package to resolving dependencies
+- [Ros_Noettic_Pack](https://pan.baidu.com/s/1OfzvzP9g1kPFlcXdLGFR5A?pwd=igb6)  use this package to resolving dependencies, download from baidudisk
 - [Tutorials](https://wiki.ros.org/Installation/Source) follow this tutorials to install dependencies
 
 ##### additional cmd
