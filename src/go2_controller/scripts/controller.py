@@ -25,35 +25,39 @@ class ControllerNode:
         self.client.SetTimeout(10.0)
         self.client.Init()
 
-        # Initialize threading event for controlling thread execution
-        self.event = threading.Event()
-        self.move_thread = threading.Thread(target=self.move_thread_func)
+        # Create a thread for continuous movement
+        self.move_thread = threading.Thread(target=self.move_continuous)
         self.move_thread.start()
 
-        self.move_data = [0, 0, 0]
+        self.vel = [0, 0]
+        self.vyaw = 0
 
     def callback(self, highcmd):
         if highcmd.mode == 1:
             self.client.StandUp()
         else:
-            self.client.StandDown() 
-            self.move_data = [highcmd.velocity[0], highcmd.velocity[1], highcmd.yawSpeed]
+            self.client.StandDown()
+        
+        rospy.loginfo(
+            "V_x = %f, V_y = %f, vyaw = %f", 
+            highcmd.velocity[0], highcmd.velocity[1], highcmd.yawSpeed
+        )
+        self.vel = [highcmd.velocity[0], highcmd.velocity[1]]
+        self.vyaw = highcmd.yawSpeed
 
-    def move_thread_func(self):
+    def move_continuous(self):
+        rate = rospy.Rate(10)  # 10 Hz, adjust as needed
         while not rospy.is_shutdown():
-            self.event.wait()
-
-            self.client.Move(self.move_data[0], self.move_data[0], self.move_data[0])
-            rospy.loginfo(self.move_data)
-
-            self.event.clear()
+            # Example of continuous movement with a fixed speed
+            self.client.Move(self.vel[0], self.vel[1], self.vyaw)
+            rate.sleep()
 
     def run(self):
         # spin() simply keeps Python from exiting until this node is stopped
         rospy.spin()
 
 if __name__ == '__main__':
-    ChannelFactoryInitialize(0, 'enp2s0') #改称网口名字
+    ChannelFactoryInitialize(0, 'eno1')  # 改称网口名字
     time.sleep(1)
 
     controller_node = ControllerNode()
