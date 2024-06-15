@@ -29,7 +29,8 @@ class ControllerNode:
         self.move_thread = threading.Thread(target=self.move_continuous)
         self.move_thread.start()
 
-        self.vel = [0, 0]
+        self.vx = 0
+        self.vy = 0
         self.vyaw = 0
 
     def callback(self, highcmd):
@@ -42,14 +43,15 @@ class ControllerNode:
             "V_x = %f, V_y = %f, vyaw = %f", 
             highcmd.velocity[0], highcmd.velocity[1], highcmd.yawSpeed
         )
-        self.vel = [highcmd.velocity[0], highcmd.velocity[1]]
+        self.vx = highcmd.velocity[0]
+        self.vy = highcmd.velocity[1]
         self.vyaw = highcmd.yawSpeed
 
     def move_continuous(self):
         rate = rospy.Rate(10)  # 10 Hz, adjust as needed
         while not rospy.is_shutdown():
             # Example of continuous movement with a fixed speed
-            self.client.Move(self.vel[0], self.vel[1], self.vyaw)
+            self.client.Move(self.vx, self.vy, self.vyaw)
             rate.sleep()
 
     def run(self):
