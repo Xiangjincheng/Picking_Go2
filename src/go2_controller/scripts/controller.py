@@ -25,7 +25,6 @@ class ControllerNode:
         self.client.Init()
 
     def callback(self, highcmd):
-        
         if(highcmd.mode == 1):
             self.client.StandUp()
         else:

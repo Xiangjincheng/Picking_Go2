@@ -65,6 +65,18 @@ CMAKE_BINARY_DIR = /home/cheng/unitree_noetic/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/opt/cmake/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/opt/cmake/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
@@ -89,18 +101,6 @@ install/fast: preinstall/fast
 	/opt/cmake/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/opt/cmake/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/opt/cmake/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
-
 # Special rule for the target list_install_components
 list_install_components:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
@@ -109,16 +109,6 @@ list_install_components:
 # Special rule for the target list_install_components
 list_install_components/fast: list_install_components
 .PHONY : list_install_components/fast
-
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/opt/cmake/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-.PHONY : test/fast
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
@@ -139,6 +129,16 @@ edit_cache:
 # Special rule for the target edit_cache
 edit_cache/fast: edit_cache
 .PHONY : edit_cache/fast
+
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/opt/cmake/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -172,88 +172,18 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+.PHONY : go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-roscpp_generate_messages_lisp: go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : roscpp_generate_messages_lisp
+rosgraph_msgs_generate_messages_cpp: go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+.PHONY : rosgraph_msgs_generate_messages_cpp
 
 # fast build rule for target.
-roscpp_generate_messages_lisp/fast:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/build
-.PHONY : roscpp_generate_messages_lisp/fast
-
-# Convenience name for target.
-go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-.PHONY : go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_nodejs: go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-.PHONY : roscpp_generate_messages_nodejs
-
-# fast build rule for target.
-roscpp_generate_messages_nodejs/fast:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/build.make go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/build
-.PHONY : roscpp_generate_messages_nodejs/fast
-
-# Convenience name for target.
-go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/rule:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-.PHONY : go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_eus: go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-.PHONY : roscpp_generate_messages_eus
-
-# fast build rule for target.
-roscpp_generate_messages_eus/fast:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/build.make go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/build
-.PHONY : roscpp_generate_messages_eus/fast
-
-# Convenience name for target.
-go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_cpp: go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : roscpp_generate_messages_cpp
-
-# fast build rule for target.
-roscpp_generate_messages_cpp/fast:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/build
-.PHONY : roscpp_generate_messages_cpp/fast
-
-# Convenience name for target.
-go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-.PHONY : go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_nodejs: go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-.PHONY : rosgraph_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_nodejs/fast:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
-.PHONY : rosgraph_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-.PHONY : go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_eus: go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-.PHONY : rosgraph_msgs_generate_messages_eus
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_eus/fast:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build.make go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build
-.PHONY : rosgraph_msgs_generate_messages_eus/fast
+rosgraph_msgs_generate_messages_cpp/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
+.PHONY : rosgraph_msgs_generate_messages_cpp/fast
 
 # Convenience name for target.
 go2_controller/CMakeFiles/roscpp_generate_messages_py.dir/rule:
@@ -270,18 +200,32 @@ roscpp_generate_messages_py/fast:
 .PHONY : roscpp_generate_messages_py/fast
 
 # Convenience name for target.
-go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
+go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
+.PHONY : go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_cpp: go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : rosgraph_msgs_generate_messages_cpp
+rosgraph_msgs_generate_messages_eus: go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
+.PHONY : rosgraph_msgs_generate_messages_eus
 
 # fast build rule for target.
-rosgraph_msgs_generate_messages_cpp/fast:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_cpp/fast
+rosgraph_msgs_generate_messages_eus/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build.make go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build
+.PHONY : rosgraph_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+.PHONY : go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+rosgraph_msgs_generate_messages_py: go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+.PHONY : rosgraph_msgs_generate_messages_py
+
+# fast build rule for target.
+rosgraph_msgs_generate_messages_py/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
+.PHONY : rosgraph_msgs_generate_messages_py/fast
 
 # Convenience name for target.
 go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
@@ -298,18 +242,266 @@ rosgraph_msgs_generate_messages_lisp/fast:
 .PHONY : rosgraph_msgs_generate_messages_lisp/fast
 
 # Convenience name for target.
-go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-.PHONY : go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
+go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
+.PHONY : go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-rosgraph_msgs_generate_messages_py: go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-.PHONY : rosgraph_msgs_generate_messages_py
+roscpp_generate_messages_nodejs: go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
+.PHONY : roscpp_generate_messages_nodejs
 
 # fast build rule for target.
-rosgraph_msgs_generate_messages_py/fast:
-	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
-.PHONY : rosgraph_msgs_generate_messages_py/fast
+roscpp_generate_messages_nodejs/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/build.make go2_controller/CMakeFiles/roscpp_generate_messages_nodejs.dir/build
+.PHONY : roscpp_generate_messages_nodejs/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/go2_controller_generate_messages_py.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/go2_controller_generate_messages_py.dir/rule
+.PHONY : go2_controller/CMakeFiles/go2_controller_generate_messages_py.dir/rule
+
+# Convenience name for target.
+go2_controller_generate_messages_py: go2_controller/CMakeFiles/go2_controller_generate_messages_py.dir/rule
+.PHONY : go2_controller_generate_messages_py
+
+# fast build rule for target.
+go2_controller_generate_messages_py/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_generate_messages_py.dir/build.make go2_controller/CMakeFiles/go2_controller_generate_messages_py.dir/build
+.PHONY : go2_controller_generate_messages_py/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+.PHONY : go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+roscpp_generate_messages_lisp: go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
+.PHONY : roscpp_generate_messages_lisp
+
+# fast build rule for target.
+roscpp_generate_messages_lisp/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make go2_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/build
+.PHONY : roscpp_generate_messages_lisp/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/go2_controller_generate_messages.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/go2_controller_generate_messages.dir/rule
+.PHONY : go2_controller/CMakeFiles/go2_controller_generate_messages.dir/rule
+
+# Convenience name for target.
+go2_controller_generate_messages: go2_controller/CMakeFiles/go2_controller_generate_messages.dir/rule
+.PHONY : go2_controller_generate_messages
+
+# fast build rule for target.
+go2_controller_generate_messages/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_generate_messages.dir/build.make go2_controller/CMakeFiles/go2_controller_generate_messages.dir/build
+.PHONY : go2_controller_generate_messages/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/rule
+.PHONY : go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+roscpp_generate_messages_eus: go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/rule
+.PHONY : roscpp_generate_messages_eus
+
+# fast build rule for target.
+roscpp_generate_messages_eus/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/build.make go2_controller/CMakeFiles/roscpp_generate_messages_eus.dir/build
+.PHONY : roscpp_generate_messages_eus/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/go2_controller_generate_messages_cpp.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/go2_controller_generate_messages_cpp.dir/rule
+.PHONY : go2_controller/CMakeFiles/go2_controller_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+go2_controller_generate_messages_cpp: go2_controller/CMakeFiles/go2_controller_generate_messages_cpp.dir/rule
+.PHONY : go2_controller_generate_messages_cpp
+
+# fast build rule for target.
+go2_controller_generate_messages_cpp/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_generate_messages_cpp.dir/build.make go2_controller/CMakeFiles/go2_controller_generate_messages_cpp.dir/build
+.PHONY : go2_controller_generate_messages_cpp/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/go2_controller_gencpp.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/go2_controller_gencpp.dir/rule
+.PHONY : go2_controller/CMakeFiles/go2_controller_gencpp.dir/rule
+
+# Convenience name for target.
+go2_controller_gencpp: go2_controller/CMakeFiles/go2_controller_gencpp.dir/rule
+.PHONY : go2_controller_gencpp
+
+# fast build rule for target.
+go2_controller_gencpp/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_gencpp.dir/build.make go2_controller/CMakeFiles/go2_controller_gencpp.dir/build
+.PHONY : go2_controller_gencpp/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+.PHONY : go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+rosgraph_msgs_generate_messages_nodejs: go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
+.PHONY : rosgraph_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+rosgraph_msgs_generate_messages_nodejs/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make go2_controller/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
+.PHONY : rosgraph_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/rule
+.PHONY : go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+go2_controller_generate_messages_eus: go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/rule
+.PHONY : go2_controller_generate_messages_eus
+
+# fast build rule for target.
+go2_controller_generate_messages_eus/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/build.make go2_controller/CMakeFiles/go2_controller_generate_messages_eus.dir/build
+.PHONY : go2_controller_generate_messages_eus/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/go2_controller_geneus.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/go2_controller_geneus.dir/rule
+.PHONY : go2_controller/CMakeFiles/go2_controller_geneus.dir/rule
+
+# Convenience name for target.
+go2_controller_geneus: go2_controller/CMakeFiles/go2_controller_geneus.dir/rule
+.PHONY : go2_controller_geneus
+
+# fast build rule for target.
+go2_controller_geneus/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_geneus.dir/build.make go2_controller/CMakeFiles/go2_controller_geneus.dir/build
+.PHONY : go2_controller_geneus/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/go2_controller_generate_messages_lisp.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/go2_controller_generate_messages_lisp.dir/rule
+.PHONY : go2_controller/CMakeFiles/go2_controller_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+go2_controller_generate_messages_lisp: go2_controller/CMakeFiles/go2_controller_generate_messages_lisp.dir/rule
+.PHONY : go2_controller_generate_messages_lisp
+
+# fast build rule for target.
+go2_controller_generate_messages_lisp/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_generate_messages_lisp.dir/build.make go2_controller/CMakeFiles/go2_controller_generate_messages_lisp.dir/build
+.PHONY : go2_controller_generate_messages_lisp/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/go2_controller_generate_messages_nodejs.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/go2_controller_generate_messages_nodejs.dir/rule
+.PHONY : go2_controller/CMakeFiles/go2_controller_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+go2_controller_generate_messages_nodejs: go2_controller/CMakeFiles/go2_controller_generate_messages_nodejs.dir/rule
+.PHONY : go2_controller_generate_messages_nodejs
+
+# fast build rule for target.
+go2_controller_generate_messages_nodejs/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_generate_messages_nodejs.dir/build.make go2_controller/CMakeFiles/go2_controller_generate_messages_nodejs.dir/build
+.PHONY : go2_controller_generate_messages_nodejs/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/ctrl.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/ctrl.dir/rule
+.PHONY : go2_controller/CMakeFiles/ctrl.dir/rule
+
+# Convenience name for target.
+ctrl: go2_controller/CMakeFiles/ctrl.dir/rule
+.PHONY : ctrl
+
+# fast build rule for target.
+ctrl/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/build
+.PHONY : ctrl/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+.PHONY : go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+roscpp_generate_messages_cpp: go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
+.PHONY : roscpp_generate_messages_cpp
+
+# fast build rule for target.
+roscpp_generate_messages_cpp/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make go2_controller/CMakeFiles/roscpp_generate_messages_cpp.dir/build
+.PHONY : roscpp_generate_messages_cpp/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/go2_controller_genlisp.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/go2_controller_genlisp.dir/rule
+.PHONY : go2_controller/CMakeFiles/go2_controller_genlisp.dir/rule
+
+# Convenience name for target.
+go2_controller_genlisp: go2_controller/CMakeFiles/go2_controller_genlisp.dir/rule
+.PHONY : go2_controller_genlisp
+
+# fast build rule for target.
+go2_controller_genlisp/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_genlisp.dir/build.make go2_controller/CMakeFiles/go2_controller_genlisp.dir/build
+.PHONY : go2_controller_genlisp/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/go2_controller_gennodejs.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/go2_controller_gennodejs.dir/rule
+.PHONY : go2_controller/CMakeFiles/go2_controller_gennodejs.dir/rule
+
+# Convenience name for target.
+go2_controller_gennodejs: go2_controller/CMakeFiles/go2_controller_gennodejs.dir/rule
+.PHONY : go2_controller_gennodejs
+
+# fast build rule for target.
+go2_controller_gennodejs/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_gennodejs.dir/build.make go2_controller/CMakeFiles/go2_controller_gennodejs.dir/build
+.PHONY : go2_controller_gennodejs/fast
+
+# Convenience name for target.
+go2_controller/CMakeFiles/go2_controller_genpy.dir/rule:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 go2_controller/CMakeFiles/go2_controller_genpy.dir/rule
+.PHONY : go2_controller/CMakeFiles/go2_controller_genpy.dir/rule
+
+# Convenience name for target.
+go2_controller_genpy: go2_controller/CMakeFiles/go2_controller_genpy.dir/rule
+.PHONY : go2_controller_genpy
+
+# fast build rule for target.
+go2_controller_genpy/fast:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/go2_controller_genpy.dir/build.make go2_controller/CMakeFiles/go2_controller_genpy.dir/build
+.PHONY : go2_controller_genpy/fast
+
+src/ctrl.o: src/ctrl.cpp.o
+.PHONY : src/ctrl.o
+
+# target to build an object file
+src/ctrl.cpp.o:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/src/ctrl.cpp.o
+.PHONY : src/ctrl.cpp.o
+
+src/ctrl.i: src/ctrl.cpp.i
+.PHONY : src/ctrl.i
+
+# target to preprocess a source file
+src/ctrl.cpp.i:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/src/ctrl.cpp.i
+.PHONY : src/ctrl.cpp.i
+
+src/ctrl.s: src/ctrl.cpp.s
+.PHONY : src/ctrl.s
+
+# target to generate assembly for a file
+src/ctrl.cpp.s:
+	cd /home/cheng/unitree_noetic/build && $(MAKE) $(MAKESILENT) -f go2_controller/CMakeFiles/ctrl.dir/build.make go2_controller/CMakeFiles/ctrl.dir/src/ctrl.cpp.s
+.PHONY : src/ctrl.cpp.s
 
 # Help Target
 help:
@@ -324,6 +516,17 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... go2_controller_gencpp"
+	@echo "... go2_controller_generate_messages"
+	@echo "... go2_controller_generate_messages_cpp"
+	@echo "... go2_controller_generate_messages_eus"
+	@echo "... go2_controller_generate_messages_lisp"
+	@echo "... go2_controller_generate_messages_nodejs"
+	@echo "... go2_controller_generate_messages_py"
+	@echo "... go2_controller_geneus"
+	@echo "... go2_controller_genlisp"
+	@echo "... go2_controller_gennodejs"
+	@echo "... go2_controller_genpy"
 	@echo "... roscpp_generate_messages_cpp"
 	@echo "... roscpp_generate_messages_eus"
 	@echo "... roscpp_generate_messages_lisp"
@@ -334,6 +537,10 @@ help:
 	@echo "... rosgraph_msgs_generate_messages_lisp"
 	@echo "... rosgraph_msgs_generate_messages_nodejs"
 	@echo "... rosgraph_msgs_generate_messages_py"
+	@echo "... ctrl"
+	@echo "... src/ctrl.o"
+	@echo "... src/ctrl.i"
+	@echo "... src/ctrl.s"
 .PHONY : help
 
 

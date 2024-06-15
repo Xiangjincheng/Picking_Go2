@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/cheng/unitree_noetic/devel/lib;/home/cheng/unitree_noetic/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/cheng/unitree_noetic/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -177,7 +177,7 @@ foreach(library ${libraries})
   endif()
 endforeach()
 
-set(go2_controller_EXPORTED_TARGETS "")
+set(go2_controller_EXPORTED_TARGETS "go2_controller_generate_messages_cpp;go2_controller_generate_messages_eus;go2_controller_generate_messages_lisp;go2_controller_generate_messages_nodejs;go2_controller_generate_messages_py")
 # create dummy targets for exported code generation targets to make life of users easier
 foreach(t ${go2_controller_EXPORTED_TARGETS})
   if(NOT TARGET ${t})
@@ -214,7 +214,7 @@ foreach(depend ${depends})
   _list_append_deduplicate(go2_controller_EXPORTED_TARGETS ${${go2_controller_dep}_EXPORTED_TARGETS})
 endforeach()
 
-set(pkg_cfg_extras "")
+set(pkg_cfg_extras "go2_controller-msg-extras.cmake")
 foreach(extra ${pkg_cfg_extras})
   if(NOT IS_ABSOLUTE ${extra})
     set(extra ${go2_controller_DIR}/${extra})

@@ -20,17 +20,23 @@ class ControllerNode:
         rospy.Subscriber('Unitree_Highcmd', HighCmd, self.callback)
 
         #from unitree_sdk_python init a sport client
-        # self.client = SportClient() 
-        # self.client.SetTimeout(10.0)
-        # self.client.Init()
+        self.client = SportClient() 
+        self.client.SetTimeout(10.0)
+        self.client.Init()
 
     def callback(self, highcmd):
         
-        # self.client.Move(0.3, 0, 0.3)
-        #vx:  取值范围[-2.5~5] (m/s)； vy:  取值范围[-2.5~5] (m/s)； vyaw:  取值范围[-4~4] (rad/s)
+        if(highcmd.mode == 1):
+            self.client.StandUp()
+        else:
+            self.client.StandDown()
+        
+        if(highcmd.mode == 1):
+            #vx:  取值范围[-2.5~5] (m/s)； vy:  取值范围[-2.5~5] (m/s)； vyaw:  取值范围[-4~4] (rad/s)
+            self.client.Move(highcmd.velocity[0], highcmd.velocity[1], highcmd.yawSpeed)
 
         rospy.loginfo(
-            "V_x = %f, V_y = %f, Yaw_speed = %f", 
+            "V_x = %f, V_y = %f, mode = %f", 
             highcmd.velocity[0], highcmd.velocity[1], highcmd.mode
         )
 
@@ -39,11 +45,8 @@ class ControllerNode:
         rospy.spin()
 
 if __name__ == '__main__':
-    # if len(sys.argv)>1:
-    #     ChannelFactoryInitialize(0, sys.argv[1])
-    # else:
-    #     ChannelFactoryInitialize(0)
-    # time.sleep(1)
+    ChannelFactoryInitialize(0, 'enp2s0') #改称网口名字
+    time.sleep(1)
 
     controller_node = ControllerNode()
     controller_node.run()
