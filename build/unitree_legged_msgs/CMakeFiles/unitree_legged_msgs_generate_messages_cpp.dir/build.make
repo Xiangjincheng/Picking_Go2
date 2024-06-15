@@ -98,18 +98,18 @@ unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_cpp: /home/
 
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighCmd.h: /opt/ros/noetic/lib/gencpp/gen_cpp.py
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighCmd.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/HighCmd.msg
-/home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighCmd.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/LED.msg
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighCmd.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/BmsCmd.msg
+/home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighCmd.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/LED.msg
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighCmd.h: /opt/ros/noetic/share/gencpp/msg.h.template
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating C++ code from unitree_legged_msgs/HighCmd.msg"
 	cd /home/cheng/unitree_noetic/src/unitree_legged_msgs && /home/cheng/unitree_noetic/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/HighCmd.msg -Iunitree_legged_msgs:/home/cheng/unitree_noetic/src/unitree_legged_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -p unitree_legged_msgs -o /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs -e /opt/ros/noetic/share/gencpp/cmake/..
 
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighState.h: /opt/ros/noetic/lib/gencpp/gen_cpp.py
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/HighState.msg
-/home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/IMU.msg
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/MotorState.msg
-/home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/BmsState.msg
+/home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/IMU.msg
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/Cartesian.msg
+/home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/BmsState.msg
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/HighState.h: /opt/ros/noetic/share/gencpp/msg.h.template
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating C++ code from unitree_legged_msgs/HighState.msg"
 	cd /home/cheng/unitree_noetic/src/unitree_legged_msgs && /home/cheng/unitree_noetic/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/HighState.msg -Iunitree_legged_msgs:/home/cheng/unitree_noetic/src/unitree_legged_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -p unitree_legged_msgs -o /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs -e /opt/ros/noetic/share/gencpp/cmake/..
@@ -136,10 +136,10 @@ unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_cpp: /home/
 
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/LowState.h: /opt/ros/noetic/lib/gencpp/gen_cpp.py
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/LowState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/LowState.msg
-/home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/LowState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/IMU.msg
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/LowState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/MotorState.msg
-/home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/LowState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/BmsState.msg
+/home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/LowState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/IMU.msg
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/LowState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/Cartesian.msg
+/home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/LowState.h: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/BmsState.msg
 /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs/LowState.h: /opt/ros/noetic/share/gencpp/msg.h.template
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Generating C++ code from unitree_legged_msgs/LowState.msg"
 	cd /home/cheng/unitree_noetic/src/unitree_legged_msgs && /home/cheng/unitree_noetic/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/LowState.msg -Iunitree_legged_msgs:/home/cheng/unitree_noetic/src/unitree_legged_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -p unitree_legged_msgs -o /home/cheng/unitree_noetic/devel/include/unitree_legged_msgs -e /opt/ros/noetic/share/gencpp/cmake/..

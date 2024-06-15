@@ -28,6 +28,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/cheng/unitree_noetic/src/go2_controller/CMakeLists.txt"
   "/home/cheng/unitree_noetic/src/go2_controller/package.xml"
   "/home/cheng/unitree_noetic/src/go2_controller/scripts/controller.py"
+  "/home/cheng/unitree_noetic/src/go2_controller/scripts/x_box.py"
   "/home/cheng/unitree_noetic/src/unitree_legged_msgs/CMakeLists.txt"
   "/home/cheng/unitree_noetic/src/unitree_legged_msgs/package.xml"
   "/opt/cmake/share/cmake-3.21/Modules/CMakeCInformation.cmake"
@@ -254,6 +255,8 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "go2_controller/catkin_generated/installspace/go2_controllerConfig-version.cmake"
   "go2_controller/catkin_generated/stamps/go2_controller/controller.py.stamp"
   "atomic_configure/controller.py"
+  "go2_controller/catkin_generated/stamps/go2_controller/x_box.py.stamp"
+  "atomic_configure/x_box.py"
   "go2_controller/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 

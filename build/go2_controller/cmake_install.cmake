@@ -61,3 +61,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/go2_controller" TYPE PROGRAM FILES "/home/cheng/unitree_noetic/build/go2_controller/catkin_generated/installspace/controller.py")
 endif()
 
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/go2_controller" TYPE PROGRAM FILES "/home/cheng/unitree_noetic/build/go2_controller/catkin_generated/installspace/x_box.py")
+endif()
+

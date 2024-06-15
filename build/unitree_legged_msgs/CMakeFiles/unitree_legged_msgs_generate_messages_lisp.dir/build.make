@@ -95,17 +95,17 @@ unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_lisp: /home
 
 /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighCmd.lisp: /opt/ros/noetic/lib/genlisp/gen_lisp.py
 /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighCmd.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/HighCmd.msg
-/home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighCmd.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/LED.msg
 /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighCmd.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/BmsCmd.msg
+/home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighCmd.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/LED.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating Lisp code from unitree_legged_msgs/HighCmd.msg"
 	cd /home/cheng/unitree_noetic/build/unitree_legged_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genlisp/cmake/../../../lib/genlisp/gen_lisp.py /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/HighCmd.msg -Iunitree_legged_msgs:/home/cheng/unitree_noetic/src/unitree_legged_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -p unitree_legged_msgs -o /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg
 
 /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighState.lisp: /opt/ros/noetic/lib/genlisp/gen_lisp.py
 /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/HighState.msg
-/home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/IMU.msg
 /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/MotorState.msg
-/home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/BmsState.msg
+/home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/IMU.msg
 /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/Cartesian.msg
+/home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/HighState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/BmsState.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating Lisp code from unitree_legged_msgs/HighState.msg"
 	cd /home/cheng/unitree_noetic/build/unitree_legged_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genlisp/cmake/../../../lib/genlisp/gen_lisp.py /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/HighState.msg -Iunitree_legged_msgs:/home/cheng/unitree_noetic/src/unitree_legged_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -p unitree_legged_msgs -o /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg
 
@@ -128,10 +128,10 @@ unitree_legged_msgs/CMakeFiles/unitree_legged_msgs_generate_messages_lisp: /home
 
 /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/LowState.lisp: /opt/ros/noetic/lib/genlisp/gen_lisp.py
 /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/LowState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/LowState.msg
-/home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/LowState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/IMU.msg
 /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/LowState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/MotorState.msg
-/home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/LowState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/BmsState.msg
+/home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/LowState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/IMU.msg
 /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/LowState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/Cartesian.msg
+/home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg/LowState.lisp: /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/BmsState.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/cheng/unitree_noetic/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Generating Lisp code from unitree_legged_msgs/LowState.msg"
 	cd /home/cheng/unitree_noetic/build/unitree_legged_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genlisp/cmake/../../../lib/genlisp/gen_lisp.py /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/LowState.msg -Iunitree_legged_msgs:/home/cheng/unitree_noetic/src/unitree_legged_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -p unitree_legged_msgs -o /home/cheng/unitree_noetic/devel/share/common-lisp/ros/unitree_legged_msgs/msg
 
