@@ -1,2 +1,0 @@
-go2_controller:unitree_legged_msgs
--DCATKIN_DEVEL_PREFIX=/home/cheng/unitree_noetic/devel -DCMAKE_INSTALL_PREFIX=/home/cheng/unitree_noetic/install -G Unix Makefiles
