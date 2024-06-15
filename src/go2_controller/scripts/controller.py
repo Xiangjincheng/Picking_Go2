@@ -1,4 +1,3 @@
-
 import rospy
 from unitree_legged_msgs.msg import HighCmd
 
@@ -13,31 +12,41 @@ from unitree_sdk2py.go2.sport.sport_client import (
     SPORT_PATH_POINT_SIZE,
 )
 
+import threading
+
 class ControllerNode:
     def __init__(self) -> None:
         rospy.init_node('controller', anonymous=True)
         rospy.loginfo('Controller node started')
         rospy.Subscriber('Unitree_Highcmd', HighCmd, self.callback)
 
-        #from unitree_sdk_python init a sport client
+        # from unitree_sdk_python init a sport client
         self.client = SportClient() 
         self.client.SetTimeout(10.0)
         self.client.Init()
 
+        # Initialize threading event for controlling thread execution
+        self.event = threading.Event()
+        self.move_thread = threading.Thread(target=self.move_thread_func)
+        self.move_thread.start()
+
+        self.move_data = [0, 0, 0]
+
     def callback(self, highcmd):
-        if(highcmd.mode == 1):
+        if highcmd.mode == 1:
             self.client.StandUp()
         else:
-            self.client.StandDown()
-        
-        if(highcmd.mode == 1):
-            #vx:  取值范围[-2.5~5] (m/s)； vy:  取值范围[-2.5~5] (m/s)； vyaw:  取值范围[-4~4] (rad/s)
-            self.client.Move(highcmd.velocity[0], highcmd.velocity[1], highcmd.yawSpeed)
+            self.client.StandDown() 
+            self.move_data = [highcmd.velocity[0], highcmd.velocity[1], highcmd.yawSpeed]
 
-        rospy.loginfo(
-            "V_x = %f, V_y = %f, mode = %f", 
-            highcmd.velocity[0], highcmd.velocity[1], highcmd.mode
-        )
+    def move_thread_func(self):
+        while not rospy.is_shutdown():
+            self.event.wait()
+
+            self.client.Move(self.move_data[0], self.move_data[0], self.move_data[0])
+            rospy.loginfo(self.move_data)
+
+            self.event.clear()
 
     def run(self):
         # spin() simply keeps Python from exiting until this node is stopped
@@ -48,4 +57,7 @@ if __name__ == '__main__':
     time.sleep(1)
 
     controller_node = ControllerNode()
-    controller_node.run()
+    try:
+        controller_node.run()
+    except rospy.ROSInterruptException:
+        pass

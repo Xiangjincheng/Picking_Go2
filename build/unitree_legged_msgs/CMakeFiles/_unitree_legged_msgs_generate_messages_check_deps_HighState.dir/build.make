@@ -67,7 +67,7 @@ include unitree_legged_msgs/CMakeFiles/_unitree_legged_msgs_generate_messages_ch
 include unitree_legged_msgs/CMakeFiles/_unitree_legged_msgs_generate_messages_check_deps_HighState.dir/progress.make
 
 unitree_legged_msgs/CMakeFiles/_unitree_legged_msgs_generate_messages_check_deps_HighState:
-	cd /home/cheng/unitree_noetic/build/unitree_legged_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py unitree_legged_msgs /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/HighState.msg unitree_legged_msgs/IMU:unitree_legged_msgs/BmsState:unitree_legged_msgs/MotorState:unitree_legged_msgs/Cartesian
+	cd /home/cheng/unitree_noetic/build/unitree_legged_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py unitree_legged_msgs /home/cheng/unitree_noetic/src/unitree_legged_msgs/msg/HighState.msg unitree_legged_msgs/BmsState:unitree_legged_msgs/MotorState:unitree_legged_msgs/IMU:unitree_legged_msgs/Cartesian
 
 _unitree_legged_msgs_generate_messages_check_deps_HighState: unitree_legged_msgs/CMakeFiles/_unitree_legged_msgs_generate_messages_check_deps_HighState
 _unitree_legged_msgs_generate_messages_check_deps_HighState: unitree_legged_msgs/CMakeFiles/_unitree_legged_msgs_generate_messages_check_deps_HighState.dir/build.make
