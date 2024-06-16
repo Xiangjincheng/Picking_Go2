@@ -6,6 +6,8 @@ from unitree_legged_msgs.msg import HighCmd
 class JoystickController:
     def __init__(self):
         rospy.init_node('joystick_controller', anonymous=True)
+        rospy.loginfo("节点:joystick, 已启动!")
+        
         rospy.Subscriber("joy", Joy, self.joy_callback)
         self.joy_pub = rospy.Publisher('Unitree_Highcmd', HighCmd, queue_size=10)
         self.max_linear_vel = 0.5  # 最大线速度
@@ -31,8 +33,6 @@ class JoystickController:
         rospy.spin()
 
 if __name__ == '__main__':
-    try:
-        controller = JoystickController()
-        controller.run()
-    except rospy.ROSInterruptException:
-        pass
+    
+    node = JoystickController()
+    node.run()

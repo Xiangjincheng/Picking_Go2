@@ -14,10 +14,10 @@ from unitree_sdk2py.go2.sport.sport_client import (
 
 import threading
 
-class ControllerNode:
+class UnitreeGo2:
     def __init__(self) -> None:
-        rospy.init_node('controller', anonymous=True)
-        rospy.loginfo('Controller node started')
+        rospy.init_node('unitree_go2', anonymous=True)
+        rospy.loginfo("节点:unitree_go2, 已启动!")
         rospy.Subscriber('Unitree_Highcmd', HighCmd, self.callback)
 
         # from unitree_sdk_python init a sport client
@@ -25,6 +25,7 @@ class ControllerNode:
         self.client.SetTimeout(10.0)
         self.client.Init()
 
+        # init data
         self.mode = 1   #standup mode
         self.mode_change_flag = 0
         self.vx = 0
@@ -53,13 +54,11 @@ class ControllerNode:
                 rospy.loginfo("flag = %d", self.mode_change_flag)
                 if self.mode == 1 and self.client.StopMove() == 0 and self.mode_change_flag == 1:
                     while self.client.StandUp() != 0:
-                        rospy("standup")
                         time.sleep(1)
                     self.mode_change_flag = 0
 
                 if self.mode == 0 and self.client.StopMove() == 0 and self.mode_change_flag == 1: 
                     while self.client.StandDown() != 0:
-                        rospy("standdown")
                         time.sleep(1)
                     self.mode_change_flag = 0
 
@@ -71,8 +70,5 @@ if __name__ == '__main__':
     ChannelFactoryInitialize(0, 'eno1')  # 改称网口名字
     time.sleep(1)
 
-    controller_node = ControllerNode()
-    try:
-        controller_node.run()
-    except rospy.ROSInterruptException:
-        pass
+    node = UnitreeGo2()
+    node.run()
