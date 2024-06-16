@@ -14,8 +14,8 @@ class JoystickController:
 
     def joy_callback(self, joy_data):
         highcmd = HighCmd()
-        highcmd.velocity[0] = self.max_linear_vel * joy_data.axes[0]    
-        highcmd.velocity[1] = self.max_linear_vel * joy_data.axes[1]    
+        highcmd.velocity[0] = self.max_linear_vel * joy_data.axes[1]    
+        highcmd.velocity[1] = self.max_linear_vel * joy_data.axes[0]    
 
         if(joy_data.buttons[0] == 1): #A
             self.highcmd_mode = 1    #站起

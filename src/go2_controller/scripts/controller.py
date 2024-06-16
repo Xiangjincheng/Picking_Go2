@@ -25,42 +25,32 @@ class ControllerNode:
         self.client.SetTimeout(10.0)
         self.client.Init()
 
-        self.mode = 1
+        self.mode = 1   #standup mode
         self.vx = 0
         self.vy = 0
         self.vyaw = 0
 
         # Create a thread for continuous movement
-        self.move_thread = threading.Thread(target=self.move_continuous)
+        self.move_thread = threading.Thread(target=self.unitree_move_thread)
         self.move_thread.start()
 
     def callback(self, highcmd):
-        
-        if highcmd.mode != self.mode:
-            self.mode = highcmd.mode
-            if highcmd.mode == 1:
-                self.client.StandUp()
-            else:
-                self.client.StandDown()
-        
-        rospy.loginfo(
-            "V_x = %f, V_y = %f, vyaw = %f", 
-            highcmd.velocity[0], highcmd.velocity[1], highcmd.yawSpeed
-        )
+        self.mode = highcmd.mode
         self.vx = highcmd.velocity[0]
         self.vy = highcmd.velocity[1]
         self.vyaw = highcmd.yawSpeed
 
-    def move_continuous(self):
+    def unitree_move_thread(self):
         rate = rospy.Rate(10)  # 10 Hz, adjust as needed
-        while not rospy.is_shutdown():
-            # Example of continuous movement with a fixed speed
-            rospy.loginfo(
-            "V_x = %f, V_y = %f, vyaw = %f", 
-                self.vx, self.vy, self.vyaw
-            )
-            self.client.Move(self.vx, self.vy, self.vyaw)
-            rate.sleep()
+        while not rospy.is_shutdown():            
+            if(self.vx + self.vy + self.vyaw) != 0.0 and self.client.StopMove() == 0:   #速度不为0，并且停止所有运动
+                self.client.Move(self.vx, self.vy, self.vyaw)
+                rate.sleep()
+            if self.mode == 1 and self.client.StopMove() == 0:
+                self.client.StandUp()
+
+            if self.mode == 0 and self.client.StopMove() == 0:
+                self.client.StandDown()
 
     def run(self):
         # spin() simply keeps Python from exiting until this node is stopped
