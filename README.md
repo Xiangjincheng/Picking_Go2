@@ -1,4 +1,4 @@
-## JAKA_Unitree_Go2 Base Loongnix 
+## JAKA_Unitree_Go2 Base Loongnix
 
 ### dependences：
 [ROS_NOETIC on Loongarch64](./ros_noetic.md)
