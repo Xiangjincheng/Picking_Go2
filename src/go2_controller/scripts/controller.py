@@ -25,19 +25,23 @@ class ControllerNode:
         self.client.SetTimeout(10.0)
         self.client.Init()
 
-        # Create a thread for continuous movement
-        self.move_thread = threading.Thread(target=self.move_continuous)
-        self.move_thread.start()
-
+        self.mode = 1
         self.vx = 0
         self.vy = 0
         self.vyaw = 0
 
+        # Create a thread for continuous movement
+        self.move_thread = threading.Thread(target=self.move_continuous)
+        self.move_thread.start()
+
     def callback(self, highcmd):
-        if highcmd.mode == 1:
-            self.client.StandUp()
-        else:
-            self.client.StandDown()
+        
+        if highcmd.mode != self.mode:
+            self.mode = highcmd.mode
+            if highcmd.mode == 1:
+                self.client.StandUp()
+            else:
+                self.client.StandDown()
         
         rospy.loginfo(
             "V_x = %f, V_y = %f, vyaw = %f", 
@@ -51,6 +55,10 @@ class ControllerNode:
         rate = rospy.Rate(10)  # 10 Hz, adjust as needed
         while not rospy.is_shutdown():
             # Example of continuous movement with a fixed speed
+            rospy.loginfo(
+            "V_x = %f, V_y = %f, vyaw = %f", 
+                self.vx, self.vy, self.vyaw
+            )
             self.client.Move(self.vx, self.vy, self.vyaw)
             rate.sleep()
 

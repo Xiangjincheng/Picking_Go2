@@ -10,7 +10,7 @@ class JoystickController:
         self.joy_pub = rospy.Publisher('Unitree_Highcmd', HighCmd, queue_size=10)
         self.max_linear_vel = 0.5  # 最大线速度
         self.max_angular_vel = 1.0  # 最大角速度
-        self.highcmd_mode = 0
+        self.highcmd_mode = 1
 
     def joy_callback(self, joy_data):
         highcmd = HighCmd()
