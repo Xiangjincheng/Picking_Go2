@@ -26,6 +26,7 @@ class ControllerNode:
         self.client.Init()
 
         self.mode = 1   #standup mode
+        self.mode_change_flag = 0
         self.vx = 0
         self.vy = 0
         self.vyaw = 0
@@ -35,22 +36,32 @@ class ControllerNode:
         self.move_thread.start()
 
     def callback(self, highcmd):
-        self.mode = highcmd.mode
+        if self.mode != highcmd.mode:
+            self.mode_change_flag = 1
+            self.mode = highcmd.mode
         self.vx = highcmd.velocity[0]
         self.vy = highcmd.velocity[1]
         self.vyaw = highcmd.yawSpeed
 
     def unitree_move_thread(self):
         rate = rospy.Rate(10)  # 10 Hz, adjust as needed
-        while not rospy.is_shutdown():            
-            if(self.vx + self.vy + self.vyaw) != 0.0 and self.client.StopMove() == 0:   #速度不为0，并且停止所有运动
+        while not rospy.is_shutdown():        
+            if(self.vx + self.vy + self.vyaw) != 0.0 :   #速度不为0，并且停止所有运动
                 self.client.Move(self.vx, self.vy, self.vyaw)
                 rate.sleep()
-            if self.mode == 1 and self.client.StopMove() == 0:
-                self.client.StandUp()
+            else:
+                rospy.loginfo("flag = %d", self.mode_change_flag)
+                if self.mode == 1 and self.client.StopMove() == 0 and self.mode_change_flag == 1:
+                    while self.client.StandUp() != 0:
+                        rospy("standup")
+                        time.sleep(1)
+                    self.mode_change_flag = 0
 
-            if self.mode == 0 and self.client.StopMove() == 0:
-                self.client.StandDown()
+                if self.mode == 0 and self.client.StopMove() == 0 and self.mode_change_flag == 1: 
+                    while self.client.StandDown() != 0:
+                        rospy("standdown")
+                        time.sleep(1)
+                    self.mode_change_flag = 0
 
     def run(self):
         # spin() simply keeps Python from exiting until this node is stopped

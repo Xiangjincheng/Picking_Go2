@@ -21,7 +21,7 @@ class JoystickController:
             self.highcmd_mode = 1    #站起
 
         if(joy_data.buttons[1] == 1): #B
-            self.highcmd_mode = 0    
+            self.highcmd_mode = 0
         
         highcmd.mode = self.highcmd_mode 
 
