@@ -37,21 +37,6 @@ class Yolov5Pred:
 
 
     def rs_image_callback(self, image):
-        # imgsz = check_img_size(self.img_size, s=self.model.stride.max())
-        
-        # color_image = self.bridge.imgmsg_to_cv2(image, "bgr8")
-        # mask = np.zeros([color_image.shape[0], color_image.shape[1]], dtype=np.uint8)
-        # mask[0:480, 320:640] = 255
-        # imgs = [None]
-        # imgs[0] = color_image
-        # im0s = imgs.copy()
-        # img = [letterbox(x, new_shape=imgsz)[0] for x in im0s]
-        # img = np.stack(img, 0)
-        # img = img[:, :, :, ::-1].transpose(0, 3, 1, 2)  # BGR to RGB, to 3x416x416, uint8 to float32
-        # img = np.ascontiguousarray(img, dtype=np.float16 if self.half else np.float32)
-        # img /= 255.0  # 0 - 255 to 0.0 - 1.0
-        
-        #########################待测试############################
         color_image = self.bridge.imgmsg_to_cv2(image, "bgr8")
         imgsz = check_img_size(self.img_size, s=self.model.stride.max())
         # Create mask

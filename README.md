@@ -7,6 +7,23 @@
 
 
 
+### ROS多机通信
+
+```bash
+#树莓派上 .bashrc 
+
+export ROS_HOSTNAME=树莓派ip
+export ROS_MASTER_URI=树莓派ip:11311
+
+#从机 .bashrc
+export ROS_HOSTNAME=从机ip
+export ROS_MASTER_URI=树莓派ip:11311
+```
+
+
+
+
+
 ### Add Joystick (Microsoft X-Box 360 pad)
 
 ```bash
