@@ -3,13 +3,14 @@
 ### dependences：
 [ROS_NOETIC on Loongarch64](./ros_noetic.md)
 
+[RealSense](https://github.com/IntelRealSense/librealsense)
 
 
 
-### add Joystick (Microsoft X-Box 360 pad)
+### Add Joystick (Microsoft X-Box 360 pad)
 
 ```bash
-#安装noetic-joy
+#安装noetic-joy *
 sudo apt install ros-noetic-joy
 
 # 将接收器插在电脑上，并检查电脑是否发现设备。
