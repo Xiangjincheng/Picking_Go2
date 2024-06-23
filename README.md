@@ -10,14 +10,13 @@
 ### ROS多机通信
 
 ```bash
-#树莓派上 .bashrc 
-
+#树莓派（作为主机） .bashrc 
 export ROS_HOSTNAME=树莓派ip
-export ROS_MASTER_URI=树莓派ip:11311
+export ROS_MASTER_URI=http://树莓派ip:11311
 
 #从机 .bashrc
 export ROS_HOSTNAME=从机ip
-export ROS_MASTER_URI=树莓派ip:11311
+export ROS_MASTER_URI=http://树莓派ip:11311
 ```
 
 
