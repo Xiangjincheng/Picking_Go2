@@ -20,7 +20,8 @@ class RealSense:
 
         self.bridge = CvBridge()
 
-        self.publisher_image = rospy.Publisher('rs_image', Image, queue_size = 10)
+        self.publisher_color_image = rospy.Publisher('rs_image', Image, queue_size = 10)
+        self.publisher_depth_image = rospy.Publisher('rs_depth_image', Image, queue_size = 10)
         self.timer1 = rospy.Timer(rospy.Duration(1/10.0), self.timer1_callback)
 
         self.publisher_mis_distance = rospy.Publisher('rs_distance', Float64, queue_size = 10)
@@ -33,13 +34,12 @@ class RealSense:
         frames = self.pipeline.wait_for_frames()
         color_frame = frames.get_color_frame()
         depth_frame = frames.get_depth_frame()
-        depth_image = np.asanyarray(depth_frame.get_data())
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
         color_image = np.asanyarray(color_frame.get_data())
-        image = np.hstack((color_image, depth_colormap))
-        msg = self.bridge.cv2_to_imgmsg(color_image, 'bgr8')
-        #msg = self.bridge.cv2_to_imgmsg(image 'bgr8')
-        self.publisher_image.publish(msg)
+        depth_image = np.asanyarray(depth_frame.get_data())
+        color_image_msg = self.bridge.cv2_to_imgmsg(color_image, 'bgr8')
+        depth_image_msg = self.bridge.cv2_to_imgmsg(depth_image, 'passthrough')
+        self.publisher_color_image.publish(color_image_msg)
+        self.publisher_depth_image.publish(depth_image_msg)
 
     def timer2_callback(self, event):
         msg = Float64()

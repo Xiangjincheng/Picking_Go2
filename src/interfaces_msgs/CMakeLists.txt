@@ -14,6 +14,7 @@ add_message_files(
   Jaka.msg  
   RealSense.msg
   Rois.msg
+  Targets.msg
 )
 
 generate_messages(
