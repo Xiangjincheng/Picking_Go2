@@ -40,12 +40,11 @@ class Yolov5Pred:
         self.model = attempt_load(weights , device=self.device, inplace=True, fuse=True)  # load model  
 
         rospy.Subscriber('/camera/color/image_raw', Image, self.rs_image_callback)
-        rospy.Subscriber('/camera/depth/image_rect_raw', Image, self.depth_image_callback)
-        rospy.Subscriber('/camera/depth/camera_info', CameraInfo, self.intrinsics_callback)
+        rospy.Subscriber('/camera/aligned_depth_to_color/image_raw', Image, self.depth_image_callback)
+        rospy.Subscriber('/camera/aligned_depth_to_color/camera_info', CameraInfo, self.intrinsics_callback)
 
         self.publisher_pred_image = rospy.Publisher('pred_image', Image, queue_size = 10)
         self.publisher_obj_pos = rospy.Publisher('obj_pos', Targets, queue_size = 10)
-        #self.publisher_rois_result = rospy.Publisher('rois', Rois, queue_size = 10)
 
 
     def rs_image_callback(self, color_image_msg):
@@ -60,10 +59,8 @@ class Yolov5Pred:
         img = np.stack(img, 0)
         img = img[:, :, :, ::-1].transpose(0, 3, 1, 2)  # BGR to RGB, to 3x416x416, uint8 to float32
         img = np.ascontiguousarray(img, dtype=np.float16 if self.half else np.float32) / 255.0
-
         # Ensure contiguous memory for performance
         img = np.ascontiguousarray(img)
-
         # Get detections
         img = torch.from_numpy(img).to(self.device)
         if img.ndimension() == 3:
@@ -75,13 +72,11 @@ class Yolov5Pred:
         if pred[0] is not None:
             result_img = self.draw_boxes(color_image, pred[0])
             obj_pos_msg = self.pixel_to_point(pred[0])
-            #rois_msg = self.pred_to_rois(pred[0])
 
         pred_image_msg = self.bridge.cv2_to_imgmsg(result_img, "bgr8")
         self.publisher_pred_image.publish(pred_image_msg)     # publish predicted image
 
         self.publisher_obj_pos.publish(obj_pos_msg)
-        #self.publisher_rois_result.publish(rois_msg)        #publish rois
 
     def depth_image_callback(self, depth_image):
         self.depth_iamge = depth_image
@@ -119,27 +114,13 @@ class Yolov5Pred:
                 obj_pos = Point()
                 mid_x=int((target[0].item() + target[2].item()) / 2.0)
                 mid_y=int((target[1].item() + target[3].item()) / 2.0)
-                rospy.loginfo(f"Depth value at pixel ({mid_x}, {mid_y}): {depth_image[mid_y][mid_x]} mm")
+                #rospy.loginfo(f"Depth value at pixel ({mid_x}, {mid_y}): {depth_image[mid_y][mid_x]} mm")
                 if depth_image[mid_y][mid_x] != 0:
                     camera_coordinate = rs.rs2_deproject_pixel_to_point(self.intrinsics, [mid_x,mid_y], depth_image[mid_y][mid_x]/1000)
                     obj_pos.x, obj_pos.y, obj_pos.z = camera_coordinate[0], camera_coordinate[1], camera_coordinate[2]
                     obj_pos_msg.targets.append(obj_pos)
 
         return obj_pos_msg               
-
-    #predicted result to rois
-    # def pred_to_rois(self, pred):
-    #     rois_msg = Rois()
-    #     if pred !=None:
-    #         for target in pred:
-    #             roi = RegionOfInterest()
-    #             roi.x_offset = int(target[0].item())
-    #             roi.y_offset = int(target[1].item())
-    #             roi.width = int(target[2].item()-target[0].item())
-    #             roi.height = int(target[3].item()-target[1].item())
-    #             rois_msg.rois.append(roi)
-    #     return rois_msg
-
 
     def run(self):
         rospy.spin()

@@ -1,3 +1,4 @@
+# 弃用
 import rospy
 from sensor_msgs.msg import Image
 from interfaces_msgs.msg import Images
