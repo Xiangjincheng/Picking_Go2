@@ -1,5 +1,6 @@
 import rospy
 from sensor_msgs.msg import Image
+from interfaces_msgs.msg import Images
 from std_msgs.msg import Float64
 import cv2
 from cv_bridge import CvBridge
@@ -21,7 +22,7 @@ class RealSense:
         self.bridge = CvBridge()
 
         self.publisher_color_image = rospy.Publisher('rs_image', Image, queue_size = 10)
-        self.publisher_depth_image = rospy.Publisher('rs_depth_image', Image, queue_size = 10)
+        self.publisher_depth_image = rospy.Publisher('fix_image', Images, queue_size = 10)
         self.timer1 = rospy.Timer(rospy.Duration(1/10.0), self.timer1_callback)
 
         self.publisher_mis_distance = rospy.Publisher('rs_distance', Float64, queue_size = 10)
@@ -36,10 +37,24 @@ class RealSense:
         depth_frame = frames.get_depth_frame()
         color_image = np.asanyarray(color_frame.get_data())
         depth_image = np.asanyarray(depth_frame.get_data())
+        depth_intrinsics = depth_frame.profile.as_video_stream_profile().intrinsics
+        # 打印内参
+        print("Depth Intrinsics:")
+        print(f"Width: {depth_intrinsics.width}")
+        print(f"Height: {depth_intrinsics.height}")
+        print(f"PPX: {depth_intrinsics.ppx}")
+        print(f"PPY: {depth_intrinsics.ppy}")
+        print(f"FX: {depth_intrinsics.fx}")
+        print(f"FY: {depth_intrinsics.fy}")
+        print(f"Model: {depth_intrinsics.model}")
+        print(f"Coeffs: {depth_intrinsics.coeffs}")
         color_image_msg = self.bridge.cv2_to_imgmsg(color_image, 'bgr8')
         depth_image_msg = self.bridge.cv2_to_imgmsg(depth_image, 'passthrough')
+        fix_image_msg = Images()
+        fix_image_msg.color_image = color_image_msg
+        fix_image_msg.depth_image = depth_image_msg
         self.publisher_color_image.publish(color_image_msg)
-        self.publisher_depth_image.publish(depth_image_msg)
+        self.publisher_depth_image.publish(fix_image_msg)
 
     def timer2_callback(self, event):
         msg = Float64()

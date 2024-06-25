@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
   FILES
+  Images.msg
   Jaka.msg  
   RealSense.msg
   Rois.msg
