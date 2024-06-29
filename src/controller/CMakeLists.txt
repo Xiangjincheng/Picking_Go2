@@ -34,7 +34,7 @@ catkin_install_python(PROGRAMS
   scripts/unitree_go2.py
   scripts/joystick.py
   scripts/yolov5_pred.py
-  scripts/jaka_controller.py
+  scripts/rois_to_point.py
   scripts/camera_realsense.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

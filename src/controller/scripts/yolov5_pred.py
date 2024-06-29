@@ -1,4 +1,5 @@
 import rospy
+from std_msgs.msg import Bool
 from sensor_msgs.msg import RegionOfInterest
 from sensor_msgs.msg import CameraInfo, Image
 from geometry_msgs.msg import Point
@@ -18,10 +19,9 @@ yolov5_pak_dir = os.path.join(current_dir, "..", "yolov5_pak")
 sys.path.append(yolov5_pak_dir)
 
 from models.experimental import attempt_load
-from utils.dataloaders import LoadStreams, LoadImages
 from utils.torch_utils import select_device
 from utils.augmentations import letterbox
-from utils.general import check_img_size, make_divisible, non_max_suppression
+from utils.general import check_img_size, non_max_suppression
 
 
  
@@ -30,30 +30,28 @@ class Yolov5Pred:
         rospy.init_node('yolov5_pred', anonymous=True)
         rospy.loginfo("节点:yolov5_pred, 已启动!")
 
-        self.bridge=CvBridge()
-        self.intrinsics = rs.intrinsics()
-        self.depth_iamge = Image()
         self.img_size = 640
+        self.bridge=CvBridge()
         self.device = select_device('cpu')
         self.half = self.device.type != 'cpu'
         weights = os.path.join(current_dir, "..", "yolov5_pak", "best_3_20.pt")
         self.model = attempt_load(weights , device=self.device, inplace=True, fuse=True)  # load model  
 
+        self.pitch_flag = True
+
         rospy.Subscriber('/camera/color/image_raw', Image, self.rs_image_callback)
-        rospy.Subscriber('/camera/aligned_depth_to_color/image_raw', Image, self.depth_image_callback)
-        rospy.Subscriber('/camera/aligned_depth_to_color/camera_info', CameraInfo, self.intrinsics_callback)
 
         self.publisher_pred_image = rospy.Publisher('pred_image', Image, queue_size = 10)
-        self.publisher_obj_pos = rospy.Publisher('obj_pos', Targets, queue_size = 10)
+        self.publisher_rois = rospy.Publisher('rois', Rois, queue_size = 10)
 
 
-    def rs_image_callback(self, color_image_msg):
+    def rs_image_callback(self, color_image_msg): 
         color_image = self.bridge.imgmsg_to_cv2(color_image_msg, 'bgr8')
         imgsz = check_img_size(self.img_size, s=self.model.stride.max())
         # Create mask
         mask = np.zeros_like(color_image[:, :, 0], dtype=np.uint8)
         mask[0:480, 320:640] = 255
-   
+
         # Letterbox and preprocess image
         img = [letterbox(color_image, new_shape=imgsz)[0]]
         img = np.stack(img, 0)
@@ -71,28 +69,11 @@ class Yolov5Pred:
 
         if pred[0] is not None:
             result_img = self.draw_boxes(color_image, pred[0])
-            obj_pos_msg = self.pixel_to_point(pred[0])
+            rois_msg = self.pred_to_rois(pred[0])
 
         pred_image_msg = self.bridge.cv2_to_imgmsg(result_img, "bgr8")
         self.publisher_pred_image.publish(pred_image_msg)     # publish predicted image
-
-        self.publisher_obj_pos.publish(obj_pos_msg)
-
-    def depth_image_callback(self, depth_image):
-        self.depth_iamge = depth_image
-
-    def intrinsics_callback(self, msg):
-        self.intrinsics.width = msg.width
-        self.intrinsics.height = msg.height
-        self.intrinsics.ppx = msg.K[2]
-        self.intrinsics.ppy = msg.K[5]
-        self.intrinsics.fx = msg.K[0]
-        self.intrinsics.fy = msg.K[4]
-        if msg.distortion_model == 'plumb_bob':
-            self.intrinsics.model = rs.distortion.brown_conrady
-        elif msg.distortion_model == 'equidistant':
-            self.intrinsics.model = rs.distortion.kannala_brandt4
-        self.intrinsics.coeffs = [i for i in msg.D]
+        self.publisher_rois.publish(rois_msg)        #publish rois
 
     #draw target box
     def draw_boxes(self, img, pred):
@@ -105,23 +86,21 @@ class Yolov5Pred:
                 label = f'{int(cls)}: {conf:.2f}'
                 cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         return img
-    
-    def pixel_to_point(self, pred):
-        obj_pos_msg = Targets()
-        depth_image = self.bridge.imgmsg_to_cv2(self.depth_iamge)
+
+    def pred_to_rois(self, pred):
+        rois_msg = Rois()
         if pred !=None:
             for target in pred:
-                obj_pos = Point()
-                mid_x=int((target[0].item() + target[2].item()) / 2.0)
-                mid_y=int((target[1].item() + target[3].item()) / 2.0)
-                #rospy.loginfo(f"Depth value at pixel ({mid_x}, {mid_y}): {depth_image[mid_y][mid_x]} mm")
-                if depth_image[mid_y][mid_x] != 0:
-                    camera_coordinate = rs.rs2_deproject_pixel_to_point(self.intrinsics, [mid_x,mid_y], depth_image[mid_y][mid_x]/1000)
-                    obj_pos.x, obj_pos.y, obj_pos.z = camera_coordinate[0], camera_coordinate[1], camera_coordinate[2]
-                    obj_pos_msg.targets.append(obj_pos)
-
-        return obj_pos_msg               
-
+                roi = RegionOfInterest()
+                roi.x_offset = int(abs(target[0].item()))
+                roi.y_offset = int(abs(target[1].item()))
+                roi.width = int(target[2].item()-target[0].item())
+                roi.height = int(target[3].item()-target[1].item())
+                rospy.loginfo("Publishing rois with x_offset: %d" % roi.x_offset)
+                rospy.loginfo("Publishing rois with y_offset: %d" % roi.y_offset)
+                rois_msg.rois.append(roi)
+            return rois_msg
+    
     def run(self):
         rospy.spin()
 
