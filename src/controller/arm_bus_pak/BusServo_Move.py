@@ -14,5 +14,3 @@ while True:
 	# 	Board.setBusServoPulse(1, 800, 1000) # 6号舵机转到800位置，用时1000ms
 	# 	time.sleep(3) # 延时0.5s
 	# 	print(i)
-    
-    
