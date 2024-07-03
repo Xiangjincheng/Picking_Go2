@@ -22,8 +22,8 @@ class IK:
     l6 = 4.46  #吸嘴正上方到吸嘴的距离4.46cm
     alpha = degrees(atan(l6 / l5))  #计算l5和l4的夹角
 
-    def __init__(self): #根据不同款的夹持器，适配参数
-        self.arm_type = 'arm'
+    def __init__(self, arm_type): #根据不同款的夹持器，适配参数
+        self.arm_type = arm_type
         if self.arm_type == 'pump': #如果是气泵款机械臂
             self.l4 = sqrt(pow(self.l5, 2) + pow(self.l6, 2))  #第四个舵机到吸嘴作为第四个连杆
         elif self.arm_type == 'arm':
