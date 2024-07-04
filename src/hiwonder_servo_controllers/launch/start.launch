@@ -1,0 +1,5 @@
+<launch>
+<!--     <rosparam file="$(find hiwonder_servo_tutorial)/config/hiwonder_servo_controller.yaml" command="load" ns="hiwonder_servo_manager"/> -->
+    <include file="$(find hiwonder_servo_controllers)/launch/controller_manager.launch"/>
+    <include file="$(find hiwonder_servo_controllers)/launch/joint_states_publisher.launch"/>
+</launch>

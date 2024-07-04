@@ -1,0 +1,5 @@
+<launch>
+  <!-- Start joints trajectory controller controller -->
+<!--     <rosparam file="$(find hiwonder_servo_tutorials)/hiwonder_joint_controllers.yaml" command="load"/> -->
+    <node name="hiwonder_joint_states_publisher" pkg="hiwonder_servo_controllers" type="joint_state_publisher.py" output="screen" />
+</launch>

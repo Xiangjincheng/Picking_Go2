@@ -1,0 +1,5 @@
+# >>> ros_master >>>
+# PC端.bashrc文件
+export ROS_MASTER_URI=http://192.168.137.31:11311    # ros主机ip(树莓派ip)
+export ROS_HOSTNAME=192.168.137.30                 # ros本机ip（PC端ip）
+# <<< ros_master <<<
