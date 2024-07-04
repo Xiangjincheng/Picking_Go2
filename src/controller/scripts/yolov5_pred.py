@@ -23,7 +23,6 @@ from utils.torch_utils import select_device
 from utils.augmentations import letterbox
 from utils.general import check_img_size, non_max_suppression
 
-
  
 class Yolov5Pred:
     def __init__(self):
