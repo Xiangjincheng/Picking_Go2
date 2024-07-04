@@ -31,10 +31,10 @@ include_directories(
 
 
 catkin_install_python(PROGRAMS
+  scripts/arm_controller.py
   scripts/unitree_go2.py
   scripts/joystick.py
   scripts/yolov5_pred.py
   scripts/rois_to_point.py
-  scripts/camera_realsense.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
