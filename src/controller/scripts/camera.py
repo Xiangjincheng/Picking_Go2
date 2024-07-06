@@ -13,7 +13,7 @@ class CameraPublisher:
         self.img_width = 640
         self.img_height = 480
 
-        self.cap = cv2.VideoCapture(2)
+        self.cap = cv2.VideoCapture(0)
         if not self.cap.isOpened():
             rospy.logerr("无法打开摄像头")
             return
@@ -39,28 +39,8 @@ class CameraPublisher:
         ret, frame = self.cap.read()
 
         if ret:
-             # 校正图像畸变
-            undistorted_frame = self.undistort_image(frame)
-    
-            # # 进行测距算法
-            # blobs = self.detect_object(resized_frame)
-            # if len(blobs) == 1:
-            #     b = blobs[0]
-            #     Lm = (b[2] + b[3]) / 2
-            #     depth_value = self.K / Lm
-            #     # 创建并发布ROS Range消息
-            #     depth_msg = Range()
-            #     depth_msg.header.stamp = rospy.Time.now()
-            #     depth_msg.header.frame_id = 'camera_depth'
-            #     depth_msg.radiation_type = Range.INFRARED
-            #     depth_msg.field_of_view = 0.1  # 视场角，需要根据实际情况调整
-            #     depth_msg.min_range = 0.1  # 最小测量范围
-            #     depth_msg.max_range = 10.0  # 最大测量范围
-            #     depth_msg.range = depth_value  # 深度值
-            #     self.publisher_depth.publish(depth_msg)
-
             # # 将调整大小后的图像转换为ROS图像消息并发布
-            color_frame = self.bridge.cv2_to_imgmsg(undistorted_frame, encoding='bgr8')
+            color_frame = self.bridge.cv2_to_imgmsg(frame, encoding='bgr8')
             self.publisher_image.publish(color_frame)
         else:       
             rospy.logerr("无法读取摄像头帧")
