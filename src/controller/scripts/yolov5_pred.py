@@ -22,14 +22,13 @@ from models.experimental import attempt_load
 from utils.torch_utils import select_device
 from utils.augmentations import letterbox
 from utils.general import check_img_size, non_max_suppression
-
  
 class Yolov5Pred:
     def __init__(self):
         rospy.init_node('yolov5_pred', anonymous=True)
         rospy.loginfo("节点:yolov5_pred, 已启动!")
 
-        self.img_size = 640
+        self.img_size = (640, 480)
         self.bridge=CvBridge()
         self.device = select_device('cpu')
         self.half = self.device.type != 'cpu'
@@ -38,7 +37,7 @@ class Yolov5Pred:
 
         self.pitch_flag = True
 
-        rospy.Subscriber('/camera/color/image_raw', Image, self.rs_image_callback)
+        rospy.Subscriber('camera_image', Image, self.rs_image_callback)
 
         self.publisher_pred_image = rospy.Publisher('pred_image', Image, queue_size = 10)
         self.publisher_rois = rospy.Publisher('rois', Rois, queue_size = 10)
