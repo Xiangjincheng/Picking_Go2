@@ -1,27 +1,30 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(interfaces_msgs)
+project(interfaces)
 
 find_package(catkin REQUIRED COMPONENTS
+  message_generation
   roscpp
   rospy
   std_msgs
   sensor_msgs
-  message_generation
+  geometry_msgs
 )
 
 add_message_files(
   FILES
-  Images.msg
-  Jaka.msg  
-  RealSense.msg
   Rois.msg
   Targets.msg
 )
 
+add_service_files(
+  FILES
+  ArmCtrl.srv
+)
 generate_messages(
   DEPENDENCIES
   std_msgs
   sensor_msgs
+  geometry_msgs
 )
 
 catkin_package(

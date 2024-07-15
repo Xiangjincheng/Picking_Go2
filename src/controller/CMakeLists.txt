@@ -21,7 +21,6 @@ catkin_package(
   std_msgs 
   unitree_legged_msgs  
   interfaces_msgs
-
 )
 
 include_directories(
@@ -36,6 +35,5 @@ catkin_install_python(PROGRAMS
   scripts/joystick.py
   scripts/yolov5_pred.py
   scripts/rois_to_point.py
-  scripts/test.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

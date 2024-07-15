@@ -4,7 +4,7 @@ from cv_bridge import CvBridge
 
 from sensor_msgs.msg import CameraInfo, Image
 from geometry_msgs.msg import Point
-from interfaces_msgs.msg import Rois
+from interfaces.msg import Rois
 
 class RoisToPoint:
     def __init__(self):

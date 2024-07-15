@@ -3,7 +3,7 @@ from std_msgs.msg import Bool
 from sensor_msgs.msg import RegionOfInterest
 from sensor_msgs.msg import CameraInfo, Image
 from geometry_msgs.msg import Point
-from interfaces_msgs.msg import Rois, Targets, Images
+from interfaces.msg import Rois, Targets, Images
 
 import numpy as np
 import cv2
