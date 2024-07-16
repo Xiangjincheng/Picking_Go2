@@ -7,7 +7,7 @@ import numpy as np
 from cv_bridge import CvBridge
 import time
 import math
-from interfaces.srv import Depth, DepthResponse
+from interfaces.srv import RoiToPoint, RoiToPointResponse
 from geometry_msgs.msg import Point
 
 class CameraPublisher:
@@ -30,7 +30,7 @@ class CameraPublisher:
         self.bridge = CvBridge()
         self.publisher_image = rospy.Publisher('camera_image', Image, queue_size=10)
         self.timer = rospy.Timer(rospy.Duration(0.1), self.timer_callback)
-        self.depth_serve = rospy.Service('depth_serve', Depth, self.depth_callback)
+        self.roi_to_point_serve = rospy.Service('roi_to_point_serve', RoiToPoint, self.roi_to_point_callback)
 
     def timer_callback(self, event):
         ret, frame = self.cap.read()
@@ -42,7 +42,8 @@ class CameraPublisher:
             self.publisher_image.publish(color_frame)
         else:       
             rospy.loginfo("color_frame无法读取摄像头帧")
-    def depth_callback(self, request): 
+
+    def roi_to_point_callback(self, request): 
         roi = request.roi
         mid_x = int(roi.x_offset +roi.width*0.5)
         mid_y = int(roi.y_offset +roi.height *0.5)
@@ -52,11 +53,12 @@ class CameraPublisher:
             rep_point = self.sgbm(frame, mid_x, mid_y)
         else:
             rep_point = Point()
-            rospy.loginfo("无法读取摄像头帧")
-        return DepthResponse(rep_point)
+            rospy.loginfo("depth_frame无法读取摄像头帧")
+        response = RoiToPointResponse()
+        response.target = rep_point
+        return response
 
     def sgbm(self, frame, x, y):
-        print('start sgbm')
         # 左镜头的内参，如焦距
         left_camera_matrix = np.array([[516.5066236,-1.444673028,320.2950423],[0,516.5816117,270.7881873],[0.,0.,1.]])
         right_camera_matrix = np.array([[511.8428182,1.295112628,317.310253],[0,513.0748795,269.5885026],[0.,0.,1.]])

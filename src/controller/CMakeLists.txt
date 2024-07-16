@@ -32,6 +32,6 @@ catkin_install_python(PROGRAMS
   scripts/camera.py
   scripts/joystick.py
   scripts/yolov5_pred.py
-  scripts/rois_to_point.py
+  scripts/manage.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

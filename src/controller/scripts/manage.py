@@ -15,13 +15,13 @@ class RoisToPoint:
 
         rospy.Subscriber('rois', Rois, self.rois_callback)     
 
-        self.depth_client = rospy.ServiceProxy('depth_serve', Depth)
-        self.arm_client = rospy.ServiceProxy('arm_controller', ArmCtrl)
+        self.roi_to_point_client = rospy.ServiceProxy('roi_to_point_serve', RoiToPoint)
+        self.arm_client = rospy.ServiceProxy('arm_serve', ArmCtrl)
 
     def rois_callback(self, rois_msg):
         for roi in rois_msg.rois:
             rospy.wait_for_service('depth_serve')
-            target = self.depth_client(roi)
+            target = self.roi_to_point_client(roi)
             print(target)
             # if(target):            
             #     rospy.wait_for_service('arm_controller')

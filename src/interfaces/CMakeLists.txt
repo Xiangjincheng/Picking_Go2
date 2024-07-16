@@ -19,7 +19,7 @@ add_message_files(
 add_service_files(
   FILES
   ArmCtrl.srv
-  Depth.srv
+  RoiToPoint.srv
 )
 generate_messages(
   DEPENDENCIES
