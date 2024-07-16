@@ -19,6 +19,7 @@ add_message_files(
 add_service_files(
   FILES
   ArmCtrl.srv
+  Depth.srv
 )
 generate_messages(
   DEPENDENCIES

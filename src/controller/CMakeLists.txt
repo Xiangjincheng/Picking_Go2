@@ -2,14 +2,13 @@ cmake_minimum_required(VERSION 3.0.2)
 project(controller)
 
 find_package(catkin REQUIRED COMPONENTS
+  message_generation
   roscpp
   rospy
   std_msgs
   unitree_legged_msgs
-  interfaces_msgs
-  message_generation  
+  interfaces
 )
-
 
 catkin_package(
   INCLUDE_DIRS include
@@ -20,18 +19,17 @@ catkin_package(
   rospy 
   std_msgs 
   unitree_legged_msgs  
-  interfaces_msgs
+  interfaces
 )
 
 include_directories(
   include ${catkin_INCLUDE_DIRS}
 )
 
-
-
 catkin_install_python(PROGRAMS
   scripts/arm_controller.py
   scripts/unitree_go2.py
+  scripts/camera.py
   scripts/joystick.py
   scripts/yolov5_pred.py
   scripts/rois_to_point.py

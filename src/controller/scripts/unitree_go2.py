@@ -11,7 +11,6 @@ from unitree_sdk2py.go2.sport.sport_client import (
     PathPoint,
     SPORT_PATH_POINT_SIZE,
 )
-
 import threading
 
 class UnitreeGo2:
@@ -19,6 +18,7 @@ class UnitreeGo2:
         rospy.init_node('unitree_go2', anonymous=True)
         rospy.loginfo("节点:unitree_go2, 已启动!")
         rospy.Subscriber('Unitree_Highcmd', HighCmd, self.callback)
+        rospy.Service('go2_serve',)
 
         # from unitree_sdk_python init a sport client
         self.client = SportClient() 

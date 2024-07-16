@@ -10,8 +10,8 @@
     <!-- Start x_box.py -->
     <!-- <node name="x_box_node" pkg="go2_controller" type="x_box.py" output="screen" /> -->
     
-    <include file="$(find hiwonder_servo_controllers)/launch/start.launch">  </include>
+    <!-- <include file="$(find hiwonder_servo_controllers)/launch/start.launch">  </include> -->
     <node name="camera" pkg="controller" type="camera.py" output="screen" /> 
-    <node name="arm_controller" pkg="controller" type="arm_controller.py" /> 
+    <!-- <node name="arm_controller" pkg="controller" type="arm_controller.py" />  -->
     <node name="rois_to_point" pkg="controller" type="rois_to_point.py" output="screen" /> 
 </launch>
