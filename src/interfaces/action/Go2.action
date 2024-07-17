@@ -1,0 +1,10 @@
+#goal
+float64 goal_distance
+
+---
+#result
+float64 final_distance 
+
+---
+#feedback
+float64 run_distance

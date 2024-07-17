@@ -13,8 +13,8 @@ float32 footRaiseHeight
 float32 bodyHeight	   
 float32[2] position 
 float32[3] euler	   
-float32[2] velocity 
-float32 yawSpeed				   
+float32[2] velocity     #
+float32 yawSpeed		#		   
 BmsCmd bms
 LED[4] led
 uint8[40] wirelessRemote
