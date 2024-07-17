@@ -19,14 +19,6 @@ class RoisToPoint:
         rospy.Subscriber('rois', Rois, self.rois_callback)     
         self.roi_to_point_client = rospy.ServiceProxy('roi_to_point_serve', RoiToPoint)
         self.arm_client = rospy.ServiceProxy('arm_serve', ArmCtrl)
-        
-        self.go2_client = actionlib.SimpleActionClient('go2_serve', Go2Action)
-        rospy.loginfo("等待Action Server启动...")
-        self.go2_client.wait_for_server()
-        rospy.loginfo("Action Server已启动")
-
-        self.target_positions = []
-        self.processing_target = False
 
     def rois_callback(self, rois_msg):
         for roi in rois_msg.rois:
@@ -38,33 +30,8 @@ class RoisToPoint:
             #     flag = self.arm_client(target)
             #     if(flag):
             #         pass
-            
-    def add_target_position(self, x, y):
-        self.target_positions.append((x, y))
-        rospy.loginfo(f"添加目标位置: x = {x}, y = {y}")
 
-    def process_next_target(self):
-        if not self.processing_target and self.target_positions:
-            target = self.target_positions.pop(0)
-            goal = Go2Goal()
-            goal.position = [target[0], target[1]]
-            rospy.loginfo("发送目标位置: x = %f, y = %f", target[0], target[1])
-            self.go2_client.send_goal(goal, done_cb=self.done_cb, active_cb=self.active_cb, feedback_cb=self.feedback_cb)
-            self.processing_target = True
-        elif not self.target_positions:
-            rospy.loginfo("没有目标位置可发送")
 
-    def feedback_cb(self, feedback):
-        rospy.loginfo("当前执行位置: x = %f, y = %f" % (feedback.current_position[0], feedback.current_position[1]))
-
-    def done_cb(self, state, result):
-        rospy.loginfo("最终位置: x = %f, y = %f" % (result.final_position[0], result.final_position[1]))
-        self.processing_target = False
-        self.process_next_target()  # 处理下一个目标
-
-    def active_cb(self):
-        rospy.loginfo("目标已被处理...")
-      
     def run(self):
         rospy.spin()
 
