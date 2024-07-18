@@ -122,8 +122,10 @@ class CameraPublisher:
         # 计算视差
         disparity = stereo.compute(img1_rectified, img2_rectified).astype(np.float32) / 16.0
         points_3d = cv2.reprojectImageTo3D(disparity, Q)
-        print(points_3d)
-        return points_3d
+        rep_point = Point()
+        rep_point.x, rep_point.y, rep_point.z = points_3d[y, x, 0], points_3d[y, x, 1], points_3d[y, x, 2]
+        print(rep_point)
+        return rep_point
 
     def run(self):
         rospy.spin()
