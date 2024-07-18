@@ -28,30 +28,17 @@ class RoisToPoint:
         rospy.loginfo("Action Server已启动")
         
         self.goal = Go2Goal()
-        self.goal.target_position = [0.70,0]
+        self.goal.target_position = [0.3,0]
         self.go2_client.send_goal(self.goal, self.done_cb, self.active_cb, self.feedback_cb)
 
     def done_cb(self, state, result):
         rospy.loginfo("最终位置: x = %f, y = %f" % (result.final_position[0], result.final_position[1]))
-        self.processing_target = False
-        self.process_next_target()  # 处理下一个目标
-
+        
     def active_cb(self):
         rospy.loginfo("目标已被处理...") 
          
     def feedback_cb(self, feedback):
         rospy.loginfo("当前执行位置: x = %f, y = %f" % (feedback.current_position[0], feedback.current_position[1]))
-
-    def process_next_target(self):
-        if not self.processing_target and self.target_positions:
-            target = self.target_positions.pop(0)
-            goal = Go2Goal()
-            goal.position = [target[0], target[1]]
-            rospy.loginfo("发送目标位置: x = %f, y = %f", target[0], target[1])
-            self.go2_client.send_goal(goal, done_cb=self.done_cb, active_cb=self.active_cb, feedback_cb=self.feedback_cb)
-            self.processing_target = True
-        elif not self.target_positions:
-            rospy.loginfo("没有目标位置可发送")
 
     def rois_callback(self, rois_msg):
         for roi in rois_msg.rois:

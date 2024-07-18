@@ -68,9 +68,9 @@ class UnitreeGo2:
             self.server.publish_feedback(feedback)
 
             if goal.target_position[0] != 0:
-                self.vx = 0.2
+                self.vx = 0.1
             if goal.target_position[1] != 0:
-                self.vy = 0.2
+                self.vy = 0.1
             
             print(f'current_data = {current_position}')
             print(f'target_position_x = {target_position_x}, target_position_y = {target_position_y}')
@@ -79,7 +79,7 @@ class UnitreeGo2:
             # 判断是否达到目标地点 
             if abs(current_position[0] - target_position_x) < 0.05:
                 self.vx = 0.0
-
+            
             if abs(current_position[1] - target_position_y) < 0.05:
                 self.vy = 0.0
 

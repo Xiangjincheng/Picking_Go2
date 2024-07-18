@@ -28,7 +28,7 @@ class Yolov5Pred:
         rospy.init_node('yolov5_pred', anonymous=True)
         rospy.loginfo("节点:yolov5_pred, 已启动!")
 
-        self.img_size = (640, 480)
+        self.img_size = (480, 640)
         self.bridge=CvBridge()
         self.device = select_device('cpu')
         self.half = self.device.type != 'cpu'
@@ -63,7 +63,7 @@ class Yolov5Pred:
             img = img.unsqueeze(0)
         
         pred = self.model(img)[0]
-        pred = non_max_suppression(pred, 0.25, 0.45)
+        pred = non_max_suppression(pred, 0.65, 0.45)
 
         if pred[0] is not None:
             result_img = self.draw_boxes(color_image, pred[0])
