@@ -82,13 +82,13 @@ class CameraPublisher:
         return response
 
     def sgbm(self, frame, x, y):
-        R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(self.sterea_camear.left_camera_matrix, self.sterea_camear.left_distortion,
-                                                                        self.sterea_camear.right_camera_matrix, self.sterea_camear.right_distortion, 
+        R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(self.sterea_camear.cam_matrix_left, self.sterea_camear.distortion_l,
+                                                                        self.sterea_camear.cam_matrix_right, self.sterea_camear.distortion_r, 
                                                                         self.sterea_camear.size, 
                                                                         self.sterea_camear.R, self.sterea_camear.T)
 
-        left_map1, left_map2 = cv2.initUndistortRectifyMap(self.sterea_camear.left_camera_matrix, self.sterea_camear.left_distortion, R1, P1, self.sterea_camear.size, cv2.CV_16SC2)
-        right_map1, right_map2 = cv2.initUndistortRectifyMap(self.sterea_camear.right_camera_matrix, self.sterea_camear.right_distortion, R2, P2, self.sterea_camear.size, cv2.CV_16SC2)
+        left_map1, left_map2 = cv2.initUndistortRectifyMap(self.sterea_camear.cam_matrix_left, self.sterea_camear.distortion_l, R1, P1, self.sterea_camear.size, cv2.CV_16SC2)
+        right_map1, right_map2 = cv2.initUndistortRectifyMap(self.sterea_camear.cam_matrix_right, self.sterea_camear.distortion_r, R2, P2, self.sterea_camear.size, cv2.CV_16SC2)
 
         frame1 = frame[0:480, 0:640]
         frame2 = frame[0:480, 640:1280]
@@ -122,8 +122,10 @@ class CameraPublisher:
         # 计算视差
         disparity = stereo.compute(img1_rectified, img2_rectified).astype(np.float32) / 16.0
         points_3d = cv2.reprojectImageTo3D(disparity, Q)
-        print(points_3d)
-        return points_3d
+        rep_point = Point()
+        rep_point.x, rep_point.y, rep_point.z = points_3d[y, x, 0], points_3d[y, x, 1], points_3d[y, x, 2]
+        print(rep_point)
+        return rep_point
 
     def run(self):
         rospy.spin()
