@@ -1,10 +1,9 @@
 #goal
-float64 goal_distance
-
+float32[2] target_position
 ---
 #result
-float64 final_distance 
-
+float32[2] final_position
 ---
 #feedback
-float64 run_distance
+float32[2] current_position
+

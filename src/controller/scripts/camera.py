@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 from cv_bridge import CvBridge
 import time
+import random
 import math
 from interfaces.srv import RoiToPoint, RoiToPointResponse
 from geometry_msgs.msg import Point
@@ -77,8 +78,8 @@ class CameraPublisher:
         size = (640, 480)
 
         R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(left_camera_matrix, left_distortion,
-                                                                        right_camera_matrix, right_distortion, size, R,
-                                                                        T)
+                                                                  right_camera_matrix, right_distortion, size, R,
+                                                                  T)
         
         # 校正查找映射表,将原始图像和校正后的图像上的点一一对应起来
         left_map1, left_map2 = cv2.initUndistortRectifyMap(left_camera_matrix, left_distortion, R1, P1, size, cv2.CV_16SC2)
@@ -102,7 +103,7 @@ class CameraPublisher:
         #   mode                        sgbm算法选择模式，以速度由快到慢为：STEREO_SGBM_MODE_SGBM_3WAY、
         #                               STEREO_SGBM_MODE_HH4、STEREO_SGBM_MODE_SGBM、STEREO_SGBM_MODE_HH。精度反之
         # ------------------------------------------------------------------------------------------------------
-        blockSize = 8
+        blockSize = 5
         img_channels = 3
         stereo = cv2.StereoSGBM_create(minDisparity=1,
                                     numDisparities=64,
@@ -124,7 +125,7 @@ class CameraPublisher:
         # return point_x, point_y, point_z
         point = Point()
         point.x, point.y, point.z = threeD[y][x][0] / 1000.0, threeD[y][x][1] / 1000.0, threeD[y][x][2] / 1000.0    
-        
+        print(threeD[y][x])
         return point
 
     def run(self):
