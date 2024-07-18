@@ -120,16 +120,10 @@ class CameraPublisher:
                                     speckleRange=100,
                                     mode=cv2.STEREO_SGBM_MODE_HH)
         # 计算视差
-        disparity = stereo.compute(img1_rectified, img2_rectified)
-        
-        threeD = cv2.reprojectImageTo3D(disparity, Q, handleMissingValues=True)
-        # 计算出的threeD，需要乘以16，才等于现实中的距离
-        threeD = threeD * 16
-        # return point_x, point_y, point_z
-        point = Point()
-        point.x, point.y, point.z = threeD[y][x][0] / 1000.0, threeD[y][x][1] / 1000.0, threeD[y][x][2] / 1000.0    
-        print(threeD[y][x])
-        return point
+        disparity = stereo.compute(img1_rectified, img2_rectified).astype(np.float32) / 16.0
+        points_3d = cv2.reprojectImageTo3D(disparity, Q)
+        print(points_3d)
+        return points_3d
 
     def run(self):
         rospy.spin()
