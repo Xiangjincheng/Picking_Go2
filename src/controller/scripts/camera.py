@@ -11,6 +11,27 @@ import math
 from interfaces.srv import RoiToPoint, RoiToPointResponse
 from geometry_msgs.msg import Point
 
+class stereoCamera(object):
+    def __init__(self):
+        # 左相机内参
+        self.cam_matrix_left = np.array([[519.986208891309, 0.406696263103782, 322.800493646764],[0, 520.076546808808, 240.037862316179],[0.,0.,1.]])
+        # 右相机内参
+        self.cam_matrix_right = np.array([[514.941499937349, 0.336532156527875, 291.833723212528],[0, 514.874180707603, 241.201518688453],[0.,0.,1.]])
+
+        # 左右相机畸变系数:[k1, k2, p1, p2, k3]
+        self.distortion_l = np.array([[-0.054568256319688, 0.365710553696214, -0.00244714704429, -0.001503496381615, -0.778416903681303]])
+        self.distortion_r = np.array([[-0.067526549493682, 0.420999197085466, -0.001590771322507, -0.001741268417658, -0.679200259626978]])
+
+        # 旋转矩阵
+        self.R = np.array([[0.999989550908624, 0.0011552556161, 0.004423059803995],
+                        [-0.001145008514507, 0.999996656573218, -0.00231857669421],
+                        [-0.004425723564566, 0.002313488026054, 0.999987530294295]])
+
+
+        # 平移矩阵
+        self.T = np.array([-58.2697787032485, -0.212211320328094, 1.20710537108232])
+        self.size = (640, 480)
+
 class CameraPublisher:
     def __init__(self):
         rospy.init_node('camera_publisher', anonymous=True)
@@ -29,6 +50,7 @@ class CameraPublisher:
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.img_width)
         
         self.bridge = CvBridge()
+        self.sterea_camear = stereoCamera()
         self.publisher_image = rospy.Publisher('camera_image', Image, queue_size=10)
         self.timer = rospy.Timer(rospy.Duration(0.1), self.timer_callback)
         self.roi_to_point_serve = rospy.Service('roi_to_point_serve', RoiToPoint, self.roi_to_point_callback)
@@ -60,39 +82,20 @@ class CameraPublisher:
         return response
 
     def sgbm(self, frame, x, y):
-        # 左镜头的内参，如焦距
-        left_camera_matrix = np.array([[516.5066236,-1.444673028,320.2950423],[0,516.5816117,270.7881873],[0.,0.,1.]])
-        right_camera_matrix = np.array([[511.8428182,1.295112628,317.310253],[0,513.0748795,269.5885026],[0.,0.,1.]])
+        R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(self.sterea_camear.left_camera_matrix, self.sterea_camear.left_distortion,
+                                                                        self.sterea_camear.right_camera_matrix, self.sterea_camear.right_distortion, 
+                                                                        self.sterea_camear.size, 
+                                                                        self.sterea_camear.R, self.sterea_camear.T)
 
-        # 畸变系数,K1、K2、K3为径向畸变,P1、P2为切向畸变
-        left_distortion = np.array([[-0.046645194,0.077595167, 0.012476819,-0.000711358,0]])
-        right_distortion = np.array([[-0.061588946,0.122384376,0.011081232,-0.000750439,0]])
+        left_map1, left_map2 = cv2.initUndistortRectifyMap(self.sterea_camear.left_camera_matrix, self.sterea_camear.left_distortion, R1, P1, self.sterea_camear.size, cv2.CV_16SC2)
+        right_map1, right_map2 = cv2.initUndistortRectifyMap(self.sterea_camear.right_camera_matrix, self.sterea_camear.right_distortion, R2, P2, self.sterea_camear.size, cv2.CV_16SC2)
 
-        # 旋转矩阵
-        R = np.array([[0.999911333,-0.004351508,0.012585312],
-                    [0.004184066,0.999902792,0.013300386],
-                    [-0.012641965,-0.013246549,0.999832341]])
-        # 平移矩阵
-        T = np.array([-120.3559901,-0.188953775,-0.662073075])
-
-        size = (640, 480)
-
-        R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(left_camera_matrix, left_distortion,
-                                                                  right_camera_matrix, right_distortion, size, R,
-                                                                  T)
-        
-        # 校正查找映射表,将原始图像和校正后的图像上的点一一对应起来
-        left_map1, left_map2 = cv2.initUndistortRectifyMap(left_camera_matrix, left_distortion, R1, P1, size, cv2.CV_16SC2)
-        right_map1, right_map2 = cv2.initUndistortRectifyMap(right_camera_matrix, right_distortion, R2, P2, size, cv2.CV_16SC2)
-        # 切割为左右两张图片
         frame1 = frame[0:480, 0:640]
         frame2 = frame[0:480, 640:1280]
-        # 将BGR格式转换成灰度图片，用于畸变矫正
+
         imgL = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
         imgR = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
 
-        # 重映射，就是把一幅图像中某位置的像素放置到另一个图片指定位置的过程。
-        # 依据MATLAB测量数据重建无畸变图片,输入图片要求为灰度图
         img1_rectified = cv2.remap(imgL, left_map1, left_map2, cv2.INTER_LINEAR)
         img2_rectified = cv2.remap(imgR, right_map1, right_map2, cv2.INTER_LINEAR)
         # ------------------------------------SGBM算法----------------------------------------------------------
