@@ -19,8 +19,8 @@ class stereoCamera(object):
         self.cam_matrix_right = np.array([[514.941499937349, 0.336532156527875, 291.833723212528],[0, 514.874180707603, 241.201518688453],[0.,0.,1.]])
 
         # 左右相机畸变系数:[k1, k2, p1, p2, k3]
-        self.distortion_l = np.array([[-0.054568256319688, 0.365710553696214, -0.00244714704429, -0.001503496381615, -0.778416903681303]])
-        self.distortion_r = np.array([[-0.067526549493682, 0.420999197085466, -0.001590771322507, -0.001741268417658, -0.679200259626978]])
+        self.distortion_l = np.array([[-0.054568256319688, 0.365710553696214, -0.00244714704429, -0.001503496381615]])#-0.778416903681303
+        self.distortion_r = np.array([[-0.067526549493682, 0.420999197085466, -0.001590771322507, -0.001741268417658]])#-0.679200259626978
 
         # 旋转矩阵
         self.R = np.array([[0.999989550908624, 0.0011552556161, 0.004423059803995],
@@ -31,6 +31,22 @@ class stereoCamera(object):
         # 平移矩阵
         self.T = np.array([-58.2697787032485, -0.212211320328094, 1.20710537108232])
         self.size = (640, 480)
+
+        # # 效果好
+        # self.cam_matrix_left = np.array([[986.4572391,1.673607456,651.0717611],[0,1001.238398,535.8195077],[0.,0.,1.]])
+
+        # self.distortion_l = np.array([[-0.154511565,0.325173292, 0.006934081,0.017466934, 0]])
+
+        # self.cam_matrix_right = np.array([[998.5848065,7.37746018,667.3698587],[0,1006.305891,528.9731771],[0.,0.,1.]])
+
+        # self.distortion_r = np.array([[-0.192887524,0.706728768, 0.004233541,0.021340116,0]])
+
+        # self.R = np.array([[0.999925137,-0.003616734,-0.01168927],
+        #             [0.003742452,0.999935202,0.010751105],
+        #             [0.011649629,-0.010794046,0.999873879]])
+
+        # self.T = np.array([-117.3364039,0.277054571,-3.7672413])
+
 
 class CameraPublisher:
     def __init__(self):
@@ -72,8 +88,10 @@ class CameraPublisher:
         mid_y = int(roi.y_offset +roi.height *0.5)
 
         ret, frame = self.cap.read()
+        # print("yes")
         if ret:
             rep_point = self.sgbm(frame, mid_x, mid_y)
+            rep_point = rep_point
         else:
             rep_point = Point()
             rospy.loginfo("depth_frame无法读取摄像头帧")
@@ -85,11 +103,11 @@ class CameraPublisher:
         R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(self.sterea_camear.cam_matrix_left, self.sterea_camear.distortion_l,
                                                                         self.sterea_camear.cam_matrix_right, self.sterea_camear.distortion_r, 
                                                                         self.sterea_camear.size, 
-                                                                        self.sterea_camear.R, self.sterea_camear.T)
+                                                                        self.sterea_camear.R, self.sterea_camear.T,flags=cv2.CALIB_ZERO_DISPARITY, alpha=-1)
 
         left_map1, left_map2 = cv2.initUndistortRectifyMap(self.sterea_camear.cam_matrix_left, self.sterea_camear.distortion_l, R1, P1, self.sterea_camear.size, cv2.CV_16SC2)
         right_map1, right_map2 = cv2.initUndistortRectifyMap(self.sterea_camear.cam_matrix_right, self.sterea_camear.distortion_r, R2, P2, self.sterea_camear.size, cv2.CV_16SC2)
-
+    
         frame1 = frame[0:480, 0:640]
         frame2 = frame[0:480, 640:1280]
 
@@ -106,14 +124,14 @@ class CameraPublisher:
         #   mode                        sgbm算法选择模式，以速度由快到慢为：STEREO_SGBM_MODE_SGBM_3WAY、
         #                               STEREO_SGBM_MODE_HH4、STEREO_SGBM_MODE_SGBM、STEREO_SGBM_MODE_HH。精度反之
         # ------------------------------------------------------------------------------------------------------
-        blockSize = 5
-        img_channels = 3
-        stereo = cv2.StereoSGBM_create(minDisparity=1,
-                                    numDisparities=64,
+        blockSize = 8
+        numDisparities = 16 * 5  # 必须是16的倍数
+        stereo = cv2.StereoSGBM_create(minDisparity=0,
+                                    numDisparities=numDisparities,
                                     blockSize=blockSize,
-                                    P1=8 * img_channels * blockSize * blockSize,
-                                    P2=32 * img_channels * blockSize * blockSize,
-                                    disp12MaxDiff=-1,
+                                    P1=8 * blockSize * blockSize,
+                                    P2=32 * blockSize * blockSize,
+                                    disp12MaxDiff=1,
                                     preFilterCap=1,
                                     uniquenessRatio=10,
                                     speckleWindowSize=100,
@@ -121,9 +139,14 @@ class CameraPublisher:
                                     mode=cv2.STEREO_SGBM_MODE_HH)
         # 计算视差
         disparity = stereo.compute(img1_rectified, img2_rectified).astype(np.float32) / 16.0
-        points_3d = cv2.reprojectImageTo3D(disparity, Q)
+        disparity = cv2.medianBlur(disparity, 5)
+        points_3d = cv2.reprojectImageTo3D(disparity, Q,handleMissingValues=True)
+        # points_3d = points_3d * 16.0
+        # print(points_3d)
+        # disp = cv2.normalize(disparity, disparity, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
+        # cv2.imshow(disp)
         rep_point = Point()
-        rep_point.x, rep_point.y, rep_point.z = points_3d[y, x, 0], points_3d[y, x, 1], points_3d[y, x, 2]
+        rep_point.x, rep_point.y, rep_point.z = points_3d[y, x, 0] / 1000, points_3d[y, x, 1] / 1000, points_3d[y, x, 2] / 1000
         print(rep_point)
         return rep_point
 

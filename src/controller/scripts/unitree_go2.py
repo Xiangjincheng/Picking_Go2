@@ -66,7 +66,7 @@ class UnitreeGo2:
             
             feedback.current_position = current_position
             self.server.publish_feedback(feedback)
-
+            
             if goal.target_position[0] != 0:
                 self.vx = 0.1
             if goal.target_position[1] != 0:
@@ -117,11 +117,6 @@ class UnitreeGo2:
             #         self.mode_change_flag = 0
 
     def run(self):
-        # ChannelFactoryInitialize(0, 'eno1')
-
-        # sub = ChannelSubscriber("rt/sportmodestate", SportModeState_)
-        # sub.Init(HighStateHandler, 10)
-        # spin() simply keeps Python from exiting until this node is stopped
         rospy.spin()
 
 if __name__ == '__main__':

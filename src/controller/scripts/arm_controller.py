@@ -29,7 +29,7 @@ class ArmController:
         self.processing = False  # 初始化处理状态标志
 
     def arm_serve_callback(self, request):
-        obj_pos = request.target
+        obj_pos = request.targets
         responce = ArmCtrlResponse()
         x_dis, y_dis, z_dis = self.camera_trans_base(np.array([-obj_pos.x, obj_pos.z, obj_pos.y]))
         rospy.loginfo(f"接收到的目标物体坐标: x={x_dis}, y={y_dis}, z={z_dis}")

@@ -13,5 +13,7 @@
     <!-- <include file="$(find hiwonder_servo_controllers)/launch/start.launch">  </include> -->
     <node name="camera" pkg="controller" type="camera.py" output="screen" /> 
     <!-- <node name="arm_controller" pkg="controller" type="arm_controller.py" />  -->
-    <node name="rois_to_point" pkg="controller" type="rois_to_point.py" output="screen" /> 
+    <node name="yolov5_pred" pkg="controller" type="yolov5_pred.py" output="screen" /> 
+    <node name="rois_to_point" pkg="controller" type="manage.py" output="screen" /> 
+    <node name="arm_controller" pkg="controller" type="arm_controller.py" output="screen" /> 
 </launch>
