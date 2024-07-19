@@ -32,21 +32,6 @@ class stereoCamera(object):
         self.T = np.array([-58.2697787032485, -0.212211320328094, 1.20710537108232])
         self.size = (640, 480)
 
-        # # 效果好
-        # self.cam_matrix_left = np.array([[986.4572391,1.673607456,651.0717611],[0,1001.238398,535.8195077],[0.,0.,1.]])
-
-        # self.distortion_l = np.array([[-0.154511565,0.325173292, 0.006934081,0.017466934, 0]])
-
-        # self.cam_matrix_right = np.array([[998.5848065,7.37746018,667.3698587],[0,1006.305891,528.9731771],[0.,0.,1.]])
-
-        # self.distortion_r = np.array([[-0.192887524,0.706728768, 0.004233541,0.021340116,0]])
-
-        # self.R = np.array([[0.999925137,-0.003616734,-0.01168927],
-        #             [0.003742452,0.999935202,0.010751105],
-        #             [0.011649629,-0.010794046,0.999873879]])
-
-        # self.T = np.array([-117.3364039,0.277054571,-3.7672413])
-
 
 class CameraPublisher:
     def __init__(self):
@@ -95,9 +80,9 @@ class CameraPublisher:
         else:
             rep_point = Point()
             rospy.loginfo("depth_frame无法读取摄像头帧")
-        # response = RoiToPointResponse()
-        # response.target = rep_point
-        # return response
+        response = RoiToPointResponse()
+        response.target = rep_point
+        return response
 
     def sgbm(self, frame, x, y):
         R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(self.sterea_camear.cam_matrix_left, self.sterea_camear.distortion_l,
@@ -141,13 +126,9 @@ class CameraPublisher:
         disparity = stereo.compute(img1_rectified, img2_rectified).astype(np.float32) / 16.0
         disparity = cv2.medianBlur(disparity, 5)
         points_3d = cv2.reprojectImageTo3D(disparity, Q,handleMissingValues=True)
-        # points_3d = points_3d * 16.0
-        # print(points_3d)
-        # disp = cv2.normalize(disparity, disparity, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
-        # cv2.imshow(disp)
         rep_point = Point()
         rep_point.x, rep_point.y, rep_point.z = points_3d[y, x, 0] / 1000, points_3d[y, x, 1] / 1000, points_3d[y, x, 2] / 1000
-        print(rep_point)
+
         return rep_point
 
     def run(self):

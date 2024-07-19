@@ -55,8 +55,6 @@ class UnitreeGo2:
         # print(f'x= {target_position_x}')
         
         feedback = Go2Feedback()
-        result = Go2Result()
-
         rate = rospy.Rate(10)
         while not rospy.is_shutdown():
             self.sub.Init(self.HighStateHandler, 1)
@@ -84,6 +82,7 @@ class UnitreeGo2:
                 self.vy = 0.0
 
             if (abs(current_position[0] - target_position_x) < 0.05) and (abs(current_position[1] - target_position_y) < 0.05):
+                result = Go2Result()
                 result.final_position = current_position
                 self.server.set_succeeded(result)
                 break

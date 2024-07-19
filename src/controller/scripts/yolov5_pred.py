@@ -3,14 +3,14 @@ from std_msgs.msg import Bool
 from sensor_msgs.msg import RegionOfInterest
 from sensor_msgs.msg import CameraInfo, Image
 from geometry_msgs.msg import Point
-from interfaces.msg import Rois
+from interfaces.msg import Rois, Go2Target
 
 import numpy as np
 import cv2
-import pyrealsense2 as rs 
 from cv_bridge import CvBridge
 import torch 
 from numpy import random
+import time
 
 import sys
 import os
@@ -22,7 +22,8 @@ from models.experimental import attempt_load
 from utils.torch_utils import select_device
 from utils.augmentations import letterbox
 from utils.general import check_img_size, non_max_suppression
- 
+
+
 class Yolov5Pred:
     def __init__(self):
         rospy.init_node('yolov5_pred', anonymous=True)
@@ -41,7 +42,7 @@ class Yolov5Pred:
 
         self.publisher_pred_image = rospy.Publisher('pred_image', Image, queue_size = 10)
         self.publisher_rois = rospy.Publisher('rois', Rois, queue_size = 10)
-
+        self.publisher_go2_target = rospy.Publisher('go2_target', Go2Target, queue_size = 10)
 
     def rs_image_callback(self, color_image_msg): 
         color_image = self.bridge.imgmsg_to_cv2(color_image_msg, 'bgr8')
@@ -68,6 +69,10 @@ class Yolov5Pred:
         if pred[0] is not None:
             result_img = self.draw_boxes(color_image, pred[0])
             rois_msg = self.pred_to_rois(pred[0])
+        else:
+            msg = Go2Target()
+            msg.target_position = [0.2, 0] 
+            self.publisher_go2_target.publish(msg)
 
         pred_image_msg = self.bridge.cv2_to_imgmsg(result_img, "bgr8")
         self.publisher_pred_image.publish(pred_image_msg)     # publish predicted image
