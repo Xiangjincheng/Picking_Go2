@@ -1,0 +1,6 @@
+# 请求部分
+geometry_msgs/Point targets
+
+---
+# 响应部分
+bool success

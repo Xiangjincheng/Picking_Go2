@@ -1,16 +1,11 @@
 import rospy
-from std_msgs.msg import Bool
-from sensor_msgs.msg import RegionOfInterest
-from sensor_msgs.msg import CameraInfo, Image
-from geometry_msgs.msg import Point
-from interfaces_msgs.msg import Rois, Targets, Images
+from sensor_msgs.msg import Image, RegionOfInterest
 
 import numpy as np
 import cv2
-import pyrealsense2 as rs 
 from cv_bridge import CvBridge
 import torch 
-from numpy import random
+
 
 import sys
 import os
@@ -23,13 +18,13 @@ from utils.torch_utils import select_device
 from utils.augmentations import letterbox
 from utils.general import check_img_size, non_max_suppression
 
- 
+
 class Yolov5Pred:
     def __init__(self):
         rospy.init_node('yolov5_pred', anonymous=True)
         rospy.loginfo("节点:yolov5_pred, 已启动!")
 
-        self.img_size = 640
+        self.img_size = (480, 640)
         self.bridge=CvBridge()
         self.device = select_device('cpu')
         self.half = self.device.type != 'cpu'
@@ -38,11 +33,10 @@ class Yolov5Pred:
 
         self.pitch_flag = True
 
-        rospy.Subscriber('/camera/color/image_raw', Image, self.rs_image_callback)
+        rospy.Subscriber('camera_image', Image, self.rs_image_callback)
 
         self.publisher_pred_image = rospy.Publisher('pred_image', Image, queue_size = 10)
-        self.publisher_rois = rospy.Publisher('rois', Rois, queue_size = 10)
-
+        self.publisher_rois = rospy.Publisher('region_of_interest', RegionOfInterest, queue_size = 10)
 
     def rs_image_callback(self, color_image_msg): 
         color_image = self.bridge.imgmsg_to_cv2(color_image_msg, 'bgr8')
@@ -64,15 +58,18 @@ class Yolov5Pred:
             img = img.unsqueeze(0)
         
         pred = self.model(img)[0]
-        pred = non_max_suppression(pred, 0.25, 0.45)
+        pred = non_max_suppression(pred, 0.65, 0.45)[0]
 
-        if pred[0] is not None:
-            result_img = self.draw_boxes(color_image, pred[0])
-            rois_msg = self.pred_to_rois(pred[0])
+        if len(pred) != 0:
+            result_img = self.draw_boxes(color_image, pred)
+            roi_msg = self.pred_to_roi(pred)
+        else:
+            result_img = color_image
+            roi_msg = RegionOfInterest()
 
         pred_image_msg = self.bridge.cv2_to_imgmsg(result_img, "bgr8")
         self.publisher_pred_image.publish(pred_image_msg)     # publish predicted image
-        self.publisher_rois.publish(rois_msg)        #publish rois
+        self.publisher_rois.publish(roi_msg)        #publish rois
 
     #draw target box
     def draw_boxes(self, img, pred):
@@ -86,19 +83,17 @@ class Yolov5Pred:
                 cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         return img
 
-    def pred_to_rois(self, pred):
-        rois_msg = Rois()
-        if pred !=None:
-            for target in pred:
-                roi = RegionOfInterest()
-                roi.x_offset = int(abs(target[0].item()))
-                roi.y_offset = int(abs(target[1].item()))
-                roi.width = int(target[2].item()-target[0].item())
-                roi.height = int(target[3].item()-target[1].item())
-                rospy.loginfo("Publishing rois with x_offset: %d" % roi.x_offset)
-                rospy.loginfo("Publishing rois with y_offset: %d" % roi.y_offset)
-                rois_msg.rois.append(roi)
-            return rois_msg
+    def pred_to_roi(self, pred):
+        target = pred[0]
+        roi = RegionOfInterest()
+        roi.x_offset = int(abs(target[0].item()))
+        roi.y_offset = int(abs(target[1].item()))
+        roi.width = int(target[2].item()-target[0].item())
+        roi.height = int(target[3].item()-target[1].item())
+        rospy.loginfo("Publishing rois with x_offset: %d" % roi.x_offset)
+        rospy.loginfo("Publishing rois with y_offset: %d" % roi.y_offset)
+
+        return roi
     
     def run(self):
         rospy.spin()

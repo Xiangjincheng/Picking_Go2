@@ -1,0 +1,6 @@
+# 请求部分
+sensor_msgs/RegionOfInterest roi
+
+---
+# 响应部分
+geometry_msgs/Point target

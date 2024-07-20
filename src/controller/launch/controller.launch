@@ -10,6 +10,10 @@
     <!-- Start x_box.py -->
     <!-- <node name="x_box_node" pkg="go2_controller" type="x_box.py" output="screen" /> -->
     
-    <include file="$(find realsense2_camera)/launch/rs_camera.launch">  </include>
-    <node name="yolov5" pkg="controller" type="yolov5_pred.py" output="screen" /> 
+    <!-- <include file="$(find hiwonder_servo_controllers)/launch/start.launch">  </include> -->
+    <node name="camera" pkg="controller" type="camera.py" output="screen" /> 
+    <!-- <node name="arm_controller" pkg="controller" type="arm_controller.py" />  -->
+    <node name="yolov5_pred" pkg="controller" type="yolov5_pred.py" output="screen" /> 
+    <node name="rois_to_point" pkg="controller" type="manage.py" output="screen" /> 
+    <node name="arm_controller" pkg="controller" type="arm_controller.py" output="screen" /> 
 </launch>

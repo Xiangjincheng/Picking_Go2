@@ -1,0 +1,9 @@
+#goal
+float32[2] target_position
+---
+#result
+float32[2] final_position
+---
+#feedback
+float32[2] current_position
+
