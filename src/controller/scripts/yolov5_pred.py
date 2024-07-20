@@ -58,12 +58,14 @@ class Yolov5Pred:
             img = img.unsqueeze(0)
         
         pred = self.model(img)[0]
-        pred = non_max_suppression(pred, 0.65, 0.45)
+        pred = non_max_suppression(pred, 0.65, 0.45)[0]
 
-        roi_msg = RegionOfInterest()
-        if pred[0] is not None:
-            result_img = self.draw_boxes(color_image, pred[0])
-            roi_msg = self.pred_to_roi(pred[0])
+        if len(pred) != 0:
+            result_img = self.draw_boxes(color_image, pred)
+            roi_msg = self.pred_to_roi(pred)
+        else:
+            result_img = color_image
+            roi_msg = RegionOfInterest()
 
         pred_image_msg = self.bridge.cv2_to_imgmsg(result_img, "bgr8")
         self.publisher_pred_image.publish(pred_image_msg)     # publish predicted image
@@ -82,17 +84,16 @@ class Yolov5Pred:
         return img
 
     def pred_to_roi(self, pred):
-        if pred !=None:
-            target = pred[0]
-            roi = RegionOfInterest()
-            roi.x_offset = int(abs(target[0].item()))
-            roi.y_offset = int(abs(target[1].item()))
-            roi.width = int(target[2].item()-target[0].item())
-            roi.height = int(target[3].item()-target[1].item())
-            rospy.loginfo("Publishing rois with x_offset: %d" % roi.x_offset)
-            rospy.loginfo("Publishing rois with y_offset: %d" % roi.y_offset)
+        target = pred[0]
+        roi = RegionOfInterest()
+        roi.x_offset = int(abs(target[0].item()))
+        roi.y_offset = int(abs(target[1].item()))
+        roi.width = int(target[2].item()-target[0].item())
+        roi.height = int(target[3].item()-target[1].item())
+        rospy.loginfo("Publishing rois with x_offset: %d" % roi.x_offset)
+        rospy.loginfo("Publishing rois with y_offset: %d" % roi.y_offset)
 
-            return roi
+        return roi
     
     def run(self):
         rospy.spin()

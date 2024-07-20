@@ -15,29 +15,35 @@ class Manage:
     def __init__(self):
         rospy.init_node('rois_to_point', anonymous=True)
         rospy.loginfo("节点:rois_to_point, 已启动!")
+
+        self.target_history = []
+        self.error_threshold = 2.0
+        self.history_length = 5
         self.bridge=CvBridge()
 
         rospy.Subscriber('region_of_interest', RegionOfInterest, self.rois_callback)     
         self.roi_to_point_client = rospy.ServiceProxy('roi_to_point_serve', RoiToPoint) 
-        # self.arm_client = rospy.ServiceProxy('arm_serve', ArmCtrl)
+        self.arm_client = rospy.ServiceProxy('arm_serve', ArmCtrl)
         
         # add action client
         self.go2_client = actionlib.SimpleActionClient('go2_serve', Go2Action)
         self.go2_client.wait_for_server()
 
-        self.target_history = []
-        self.error_threshold = 2.0
-        self.history_length = 10
+
 
     def rois_callback(self, roi_msg):
         if roi_msg.x_offset != 0: 
             rospy.wait_for_service('roi_to_point_serve')
-            target = self.roi_to_point_client(roi_msg)
+            target = self.roi_to_point_client(roi_msg).target
             if(self.check_target(target)):
                 stable_target = self.check_target_is_stable(target)
                 if stable_target.x != 0:
-                    rospy.wait_for_service('arm_controller')
-                    flag = self.arm_client(stable_target)
+                    print(f'稳定数据{stable_target}')
+                    rospy.wait_for_service('arm_serve')
+                    while True:
+                        if self.arm_client(stable_target):
+                            break
+                    
         else:
             # go2 move x = 0.3 when roi==null
             self.goal = Go2Goal()
@@ -49,7 +55,7 @@ class Manage:
         stable_result = Point()
         if self.target_history == []:
             self.target_history.append(target)
-        elif len(self.target_history) == 5:
+        elif len(self.target_history) == self.history_length:
             avg_x = sum(t.x for t in self.target_history) / self.history_length
             avg_y = sum(t.y for t in self.target_history) / self.history_length
             avg_z = sum(t.z for t in self.target_history) / self.history_length

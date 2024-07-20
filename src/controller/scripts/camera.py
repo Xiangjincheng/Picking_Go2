@@ -58,9 +58,9 @@ class CameraPublisher:
 
     def timer_callback(self, event):
         ret, frame = self.cap.read()
-        self.frame1 = frame[0:480, 0:640]
-        self.frame2 = frame[0:480, 640:1280]
         if ret:
+            self.frame1 = frame[0:480, 0:640]
+            self.frame2 = frame[0:480, 640:1280]
             # 将调整大小后的图像转换为ROS图像消息并发布
             color_frame = self.bridge.cv2_to_imgmsg(self.frame1, encoding='bgr8')
             self.publisher_image.publish(color_frame)
