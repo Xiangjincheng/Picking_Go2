@@ -32,24 +32,20 @@ class Manage:
 
 
     def rois_callback(self, roi_msg):
-        if roi_msg.x_offset != 0: 
+        if roi_msg.x_offset != 0:
             rospy.wait_for_service('roi_to_point_serve')
             target = self.roi_to_point_client(roi_msg).target
-            if(self.check_target(target)):
+
+            if self.check_target(target):
                 stable_target = self.check_target_is_stable(target)
+
                 if stable_target.x != 0:
                     print(f'稳定数据{stable_target}')
                     rospy.wait_for_service('arm_serve')
-                    while True:
-                        if self.arm_client(stable_target):
-                            break
-                    
+                    while not self.arm_client(stable_target):
+                        pass
         else:
-            # go2 move x = 0.3 when roi==null
-            self.goal = Go2Goal()
-            target_position = [0.3, 0]
-            self.goal.target_position = target_position
-            self.go2_client.send_goal(self.goal, self.result_callback, self.recive_callback, self.feedback_callback)
+            self.go2_move([0.3, 0])
 
     def check_target_is_stable(self, target):
         stable_result = Point()
@@ -86,11 +82,13 @@ class Manage:
             check_result = False
 
         return check_result
-
-    def go2_target_callback(self, msg):
+    
+    def go2_move(self, move_position):
         self.goal = Go2Goal()
-        self.goal.target_position = msg.target_position
+        target_position = move_position
+        self.goal.target_position = target_position
         self.go2_client.send_goal(self.goal, self.result_callback, self.recive_callback, self.feedback_callback)
+
 
     def recive_callback(self):
         rospy.loginfo("目标已被处理...") 
