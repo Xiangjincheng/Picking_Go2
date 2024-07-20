@@ -42,11 +42,13 @@ class ArmController:
             
         responce.success = move_callback
         return responce
+    
+        
 
     def camera_trans_base(self, target_camera):
         print(target_camera)
         transformation_matrix = np.array([
-            [0, 0, 1, -8], 
+            [0, 0, -1, 8], 
             [1, 0, 0, -3.5],   # 添加误差
             [0, -1, 0, 26],
             [0, 0, 0, 1]
@@ -54,7 +56,6 @@ class ArmController:
         target_camera_homogeneous = np.append(target_camera, 1)
         target_base_homogeneous = np.dot(transformation_matrix, target_camera_homogeneous)
         target_base = target_base_homogeneous[:3] / target_base_homogeneous[3]
-        target_base[0] = -target_base[0]
         return target_base[0], target_base[1], target_base[2]
 
     #def obj_pos_callback(self, obj_pos_msgs):
