@@ -1,16 +1,11 @@
 import rospy
-from std_msgs.msg import Bool
-from sensor_msgs.msg import RegionOfInterest
-from sensor_msgs.msg import CameraInfo, Image
-from geometry_msgs.msg import Point
-from interfaces.msg import Rois, Go2Target
+from sensor_msgs.msg import Image, RegionOfInterest
 
 import numpy as np
 import cv2
 from cv_bridge import CvBridge
 import torch 
-from numpy import random
-import time
+
 
 import sys
 import os
@@ -41,8 +36,7 @@ class Yolov5Pred:
         rospy.Subscriber('camera_image', Image, self.rs_image_callback)
 
         self.publisher_pred_image = rospy.Publisher('pred_image', Image, queue_size = 10)
-        self.publisher_rois = rospy.Publisher('rois', Rois, queue_size = 10)
-        self.publisher_go2_target = rospy.Publisher('go2_target', Go2Target, queue_size = 10)
+        self.publisher_rois = rospy.Publisher('region_of_interest', RegionOfInterest, queue_size = 10)
 
     def rs_image_callback(self, color_image_msg): 
         color_image = self.bridge.imgmsg_to_cv2(color_image_msg, 'bgr8')
@@ -66,17 +60,14 @@ class Yolov5Pred:
         pred = self.model(img)[0]
         pred = non_max_suppression(pred, 0.65, 0.45)
 
+        roi_msg = RegionOfInterest()
         if pred[0] is not None:
             result_img = self.draw_boxes(color_image, pred[0])
-            rois_msg = self.pred_to_rois(pred[0])
-        else:
-            msg = Go2Target()
-            msg.target_position = [0.2, 0] 
-            self.publisher_go2_target.publish(msg)
+            roi_msg = self.pred_to_roi(pred[0])
 
         pred_image_msg = self.bridge.cv2_to_imgmsg(result_img, "bgr8")
         self.publisher_pred_image.publish(pred_image_msg)     # publish predicted image
-        self.publisher_rois.publish(rois_msg)        #publish rois
+        self.publisher_rois.publish(roi_msg)        #publish rois
 
     #draw target box
     def draw_boxes(self, img, pred):
@@ -90,19 +81,18 @@ class Yolov5Pred:
                 cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         return img
 
-    def pred_to_rois(self, pred):
-        rois_msg = Rois()
+    def pred_to_roi(self, pred):
         if pred !=None:
-            for target in pred:
-                roi = RegionOfInterest()
-                roi.x_offset = int(abs(target[0].item()))
-                roi.y_offset = int(abs(target[1].item()))
-                roi.width = int(target[2].item()-target[0].item())
-                roi.height = int(target[3].item()-target[1].item())
-                rospy.loginfo("Publishing rois with x_offset: %d" % roi.x_offset)
-                rospy.loginfo("Publishing rois with y_offset: %d" % roi.y_offset)
-                rois_msg.rois.append(roi)
-            return rois_msg
+            target = pred[0]
+            roi = RegionOfInterest()
+            roi.x_offset = int(abs(target[0].item()))
+            roi.y_offset = int(abs(target[1].item()))
+            roi.width = int(target[2].item()-target[0].item())
+            roi.height = int(target[3].item()-target[1].item())
+            rospy.loginfo("Publishing rois with x_offset: %d" % roi.x_offset)
+            rospy.loginfo("Publishing rois with y_offset: %d" % roi.y_offset)
+
+            return roi
     
     def run(self):
         rospy.spin()

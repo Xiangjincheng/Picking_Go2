@@ -75,27 +75,21 @@ class UnitreeGo2:
             print(f'x绝对值 = {abs(current_position[0] - target_position_x)}')
             print(f'y绝对值 = {abs(current_position[1] - target_position_y)}')
             # 判断是否达到目标地点 
-            if abs(current_position[0] - target_position_x) < 0.05:
-                self.vx = 0.0
-            
-            if abs(current_position[1] - target_position_y) < 0.05:
-                self.vy = 0.0
-
             if (abs(current_position[0] - target_position_x) < 0.05) and (abs(current_position[1] - target_position_y) < 0.05):
                 result = Go2Result()
                 result.final_position = current_position
                 self.server.set_succeeded(result)
                 break
+            else:
+                if abs(current_position[0] - target_position_x) < 0.05:
+                    self.vx = 0.0
+                
+                if abs(current_position[1] - target_position_y) < 0.05:
+                    self.vy = 0.0
 
             rate.sleep()
 
-    # def callback(self, highcmd):
-    #     if self.mode != highcmd.mode:
-    #         self.mode_change_flag = 1
-    #         self.mode = highcmd.mode
-    #     self.vx = highcmd.velocity[0]
-    #     self.vy = highcmd.velocity[1]
-    #     self.vyaw = highcmd.yawSpeed
+
 
     def unitree_move_thread(self):
         rate = rospy.Rate(10)  # 10 Hz, adjust as needed

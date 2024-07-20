@@ -73,15 +73,13 @@ class CameraPublisher:
         mid_y = int(roi.y_offset +roi.height *0.5)
 
         ret, frame = self.cap.read()
-        # print("yes")
         if ret:
-            rep_point = self.sgbm(frame, mid_x, mid_y)
-            rep_point = rep_point
+            target = self.sgbm(frame, mid_x, mid_y)
+            target = target
         else:
-            rep_point = Point()
-            rospy.loginfo("depth_frame无法读取摄像头帧")
+            target = Point()
         response = RoiToPointResponse()
-        response.target = rep_point
+        response.target = target
         return response
 
     def sgbm(self, frame, x, y):
@@ -127,7 +125,7 @@ class CameraPublisher:
         disparity = cv2.medianBlur(disparity, 5)
         points_3d = cv2.reprojectImageTo3D(disparity, Q,handleMissingValues=True)
         rep_point = Point()
-        rep_point.x, rep_point.y, rep_point.z = points_3d[y, x, 0] / 1000, points_3d[y, x, 1] / 1000, points_3d[y, x, 2] / 1000
+        rep_point.x, rep_point.y, rep_point.z = points_3d[y, x, 0] / 10, points_3d[y, x, 1] / 10, points_3d[y, x, 2] / 10
 
         return rep_point
 
