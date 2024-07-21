@@ -34,8 +34,18 @@ class ArmController:
 
         x_dis, y_dis, z_dis = self.camera_trans_base(np.array([obj_pos.x, obj_pos.y, obj_pos.z]))
         rospy.loginfo(f"接收到的目标物体坐标: x={x_dis}, y={y_dis}, z={z_dis}")
-        move_callback = self.AK.setPitchRangeMoving((x_dis, y_dis, z_dis), 0, -180, 180, 1000)
+        move_callback = self.AK.setPitchRangeMoving((x_dis, y_dis, z_dis), 0, -180, 0, 2000)
         time.sleep(5)
+        self.grab_object()
+        time.sleep(1)
+        self.AK.setPitchRangeMoving((-15,0,15), -135, -180, 0, 2000)
+        time.sleep(1)
+        self.AK.setPitchRangeMoving((15,0,15), 135, 0, 180, 2000)
+        time.sleep(1)
+        setBusServoPulse(1, 0, 500)
+        time.sleep(1)
+        self.AK.setPitchRangeMoving((-15,0,15), -135, -180, 0, 2000)
+        time.sleep(1)
         self.arm_init()
         if move_callback != False:
             move_callback = True
@@ -73,7 +83,7 @@ class ArmController:
         self.processing = False  # 重置处理状态标志
 
     def arm_init(self):
-        self.AK.setPitchRangeMoving((-3, 0, 18), 0, -180, 180, 1000)
+        self.AK.setPitchRangeMoving((-3, 0, 18), 0, -180, 180, 3000)
         time.sleep(1)
         setBusServoPulse(1, 0, 500)  # 初始抓取位置
         time.sleep(1)
@@ -83,7 +93,7 @@ class ArmController:
         setBusServoPulse(1, 500, 500)  # 抓取动作
         time.sleep(1)
         rospy.loginfo("抓取动作完成")
-        self.arm_init()
+        # self.arm_init()
 
     def run(self):
         rospy.spin()
@@ -91,3 +101,5 @@ class ArmController:
 if __name__ == '__main__':
     node = ArmController()
     node.run()
+
+# scp unitree_noetic/src/controller/scripts/arm_controller.py cheng@192.168.123.222:~/unitree_noetic/src/controller/scripts/

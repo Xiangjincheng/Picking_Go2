@@ -2,6 +2,7 @@
 float32[2] target_position
 ---
 #result
+float32[2] start_position
 float32[2] final_position
 ---
 #feedback
