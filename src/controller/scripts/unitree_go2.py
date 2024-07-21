@@ -75,20 +75,22 @@ class UnitreeGo2:
             if goal.target_position[1] < 0:
                 self.vy = -0.1
             
-            print(f'current_data = {current_position}')
+            print(f'current_data = {current_position}')     
             print(f'target_position_x = {target_position_x}, target_position_y = {target_position_y}')
             print(f'x绝对值 = {abs(current_position[0] - target_position_x)}')
             print(f'y绝对值 = {abs(current_position[1] - target_position_y)}')
             # 判断是否达到目标地点 
-            if abs(current_position[0] - target_position_x) < 0.05:
+            if self.vx != 0 and abs(current_position[0] - target_position_x) < 0.05:
                 self.vx = 0.0
-            if abs(current_position[1] - target_position_y) < 0.05:
-                self.vy = 0.0
-
-            if (abs(current_position[0] - target_position_x) < 0.05) and (abs(current_position[1] - target_position_y) < 0.05):
                 result.final_position = current_position
                 self.server.set_succeeded(result)
                 break
+            if self.vy != 0 and abs(current_position[1] - target_position_y) < 0.05:
+                self.vy = 0.0
+                result.final_position = current_position
+                self.server.set_succeeded(result)
+                break
+
             rate.sleep()
 
     def unitree_move_thread(self):
@@ -102,7 +104,7 @@ class UnitreeGo2:
         rospy.spin()
 
 if __name__ == '__main__':
-    ChannelFactoryInitialize(0, 'eno1')  # 改称网口名字
+    ChannelFactoryInitialize(0, 'eth0')  # 改称网口名字
 
     node = UnitreeGo2()
     node.run()

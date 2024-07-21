@@ -19,7 +19,7 @@ class ArmController:
     def __init__(self):
         rospy.init_node('arm_controller', anonymous=True)
         rospy.loginfo("节点:arm_controller, 已启动!")
-
+        
         self.joints_pub = rospy.Publisher('/servo_controllers/port_id_1/multi_id_pos_dur', MultiRawIdPosDur, queue_size=1)
         self.arm_serve = rospy.Service('arm_serve', ArmCtrl, self.arm_serve_callback)
         #rospy.Subscriber("obj_pos", Point, self.obj_pos_callback)
