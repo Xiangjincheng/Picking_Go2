@@ -35,7 +35,18 @@ class ArmController:
         x_dis, y_dis, z_dis = self.camera_trans_base(np.array([obj_pos.x, obj_pos.y, obj_pos.z]))
         rospy.loginfo(f"接收到的目标物体坐标: x={x_dis}, y={y_dis}, z={z_dis}")
         move_callback = self.AK.setPitchRangeMoving((x_dis, y_dis, z_dis), 0, -180, 180, 1000)
-        time.sleep(5)
+        print(move_callback)
+        time.sleep(3)
+        self.grab_object()
+        time.sleep(1)
+        self.AK.setPitchRangeMoving((-15,0,15), -135, -180, 180, 1000)
+        time.sleep(1)
+        self.AK.setPitchRangeMoving((15,0,15), 135, 0, 180, 1000)
+        time.sleep(1)
+        setBusServoPulse(1, 0, 500)
+        time.sleep(1)
+        self.AK.setPitchRangeMoving((-15,0,15), -135, -180, 0, 1000)
+        time.sleep(1)
         self.arm_init()
         if move_callback != False:
             move_callback = True
@@ -48,8 +59,8 @@ class ArmController:
     def camera_trans_base(self, target_camera):
         print(target_camera)
         transformation_matrix = np.array([
-            [0, 0, -1, 8], 
-            [1, 0, 0, -3.5],   # 添加误差
+            [0, 0, -1, 13], 
+            [1, 0, 0, -2],   # 添加误差
             [0, -1, 0, 26],
             [0, 0, 0, 1]
         ])
@@ -83,7 +94,7 @@ class ArmController:
         setBusServoPulse(1, 500, 500)  # 抓取动作
         time.sleep(1)
         rospy.loginfo("抓取动作完成")
-        self.arm_init()
+        # self.arm_init()
 
     def run(self):
         rospy.spin()
@@ -91,3 +102,5 @@ class ArmController:
 if __name__ == '__main__':
     node = ArmController()
     node.run()
+
+# scp unitree_noetic/src/controller/scripts/arm_controller.py cheng@192.168.123.222:~/unitree_noetic/src/controller/scripts/

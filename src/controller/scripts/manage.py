@@ -1,6 +1,7 @@
 import actionlib.simple_action_client
 import rospy
 import numpy as np
+import time
 from cv_bridge import CvBridge
 import cv2
 from sensor_msgs.msg import  RegionOfInterest
@@ -16,9 +17,10 @@ class Manage:
         rospy.init_node('rois_to_point', anonymous=True)
         rospy.loginfo("节点:rois_to_point, 已启动!")
 
+        self.stable_target = Point()
         self.target_history = []
-        self.error_threshold = 2.0
-        self.history_length = 5
+        self.error_threshold = 0.5
+        self.history_length = 2
         self.bridge=CvBridge()
 
         rospy.Subscriber('region_of_interest', RegionOfInterest, self.rois_callback)     
@@ -29,23 +31,19 @@ class Manage:
         self.go2_client = actionlib.SimpleActionClient('go2_serve', Go2Action)
         self.go2_client.wait_for_server()
 
-
-
     def rois_callback(self, roi_msg):
         if roi_msg.x_offset != 0:
             rospy.wait_for_service('roi_to_point_serve')
             target = self.roi_to_point_client(roi_msg).target
-
+            print(f'target = {target}')
             if self.check_target(target):
                 stable_target = self.check_target_is_stable(target)
-
                 if stable_target.x != 0:
-                    print(f'稳定数据{stable_target}')
-                    rospy.wait_for_service('arm_serve')
-                    while not self.arm_client(stable_target):
-                        pass
-        else:
-            self.go2_move([0.3, 0])
+                    self.stable_target = stable_target
+                    self.go2_move([0, 0.35])
+
+       # else:
+       #     self.go2_move([0.35, 0])
 
     def check_target_is_stable(self, target):
         stable_result = Point()
@@ -87,17 +85,28 @@ class Manage:
         self.goal = Go2Goal()
         target_position = move_position
         self.goal.target_position = target_position
-        self.go2_client.send_goal(self.goal, self.result_callback, self.recive_callback, self.feedback_callback)
+        self.go2_client.send_goal(self.goal, self.result_callback, self.active_callback, self.feedback_callback)
 
-
-    def recive_callback(self):
+    def active_callback(self):
         rospy.loginfo("目标已被处理...") 
 
     # need compare result with goal
     def result_callback(self, state, result):
+        rospy.loginfo("初始位置: x = %f, y = %f" % (result.start_position[0], result.start_position[1]))
         rospy.loginfo("最终位置: x = %f, y = %f" % (result.final_position[0], result.final_position[1]))
-        
+        print(f"old stable_target = {self.stable_target}")
+        time.sleep(1)
+        x_offset = result.final_position[0]-result.start_position[0]
+        y_offset = result.final_position[1]-result.start_position[1]
+        self.stable_target.x = self.stable_target.x - x_offset*100
+        self.stable_target.z = self.stable_target.z - y_offset*100
+        rospy.wait_for_service('arm_serve')
+        print(f"new stable_target = {self.stable_target}")
+        response = self.arm_client(self.stable_target)         
+        print(response)
+            
     def feedback_callback(self, feedback):
+        pass
         rospy.loginfo("当前执行位置: x = %f, y = %f" % (feedback.current_position[0], feedback.current_position[1]))
 
     def run(self):

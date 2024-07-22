@@ -50,6 +50,8 @@ class UnitreeGo2:
     def go2_callback(self,goal):
         self.sub.Init(self.HighStateHandler, 1)
         time.sleep(0.01)
+        result.start_position = self.robot_state[:2]
+
         target_position_x = goal.target_position[0] + self.robot_state[0]    # 目标地点，格式为[x, y] 
         target_position_y = goal.target_position[1] + self.robot_state[1]
         # print(f'x= {target_position_x}')
@@ -57,11 +59,11 @@ class UnitreeGo2:
         feedback = Go2Feedback()
         rate = rospy.Rate(10)
         while not rospy.is_shutdown():
+            result = Go2Result()
             self.sub.Init(self.HighStateHandler, 1)
             time.sleep(0.01)
-            
             current_position = self.robot_state[:2]
-            
+    
             feedback.current_position = current_position
             self.server.publish_feedback(feedback)
             
@@ -76,7 +78,6 @@ class UnitreeGo2:
             print(f'y绝对值 = {abs(current_position[1] - target_position_y)}')
             # 判断是否达到目标地点 
             if (abs(current_position[0] - target_position_x) < 0.05) and (abs(current_position[1] - target_position_y) < 0.05):
-                result = Go2Result()
                 result.final_position = current_position
                 self.server.set_succeeded(result)
                 break
