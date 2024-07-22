@@ -41,7 +41,7 @@ class CameraPublisher:
         self.img_height = 480      
 
         self.fps = 0.0
-        self.cap = cv2.VideoCapture(2)
+        self.cap = cv2.VideoCapture(0)
         if not self.cap.isOpened():
             rospy.loginfo("无法打开摄像头")
             return

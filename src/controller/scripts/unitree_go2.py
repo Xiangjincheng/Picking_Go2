@@ -50,46 +50,47 @@ class UnitreeGo2:
     def go2_callback(self,goal):
         self.sub.Init(self.HighStateHandler, 1)
         time.sleep(0.01)
+        result.start_position = self.robot_state[:2]
+
         target_position_x = goal.target_position[0] + self.robot_state[0]    # 目标地点，格式为[x, y] 
         target_position_y = goal.target_position[1] + self.robot_state[1]
-        # print(f'x= {target_position_x}')
-        
+
         feedback = Go2Feedback()
         rate = rospy.Rate(10)
         while not rospy.is_shutdown():
+            result = Go2Result()
             self.sub.Init(self.HighStateHandler, 1)
             time.sleep(0.01)
-            
             current_position = self.robot_state[:2]
-            
+    
             feedback.current_position = current_position
             self.server.publish_feedback(feedback)
             
-            if goal.target_position[0] != 0:
+            if goal.target_position[0] > 0:
                 self.vx = 0.1
-            if goal.target_position[1] != 0:
+            if goal.target_position[0] < 0:
+                self.vx = -0.1     
+            if goal.target_position[1] > 0:
                 self.vy = 0.1
+            if goal.target_position[1] < 0:
+                self.vy = -0.1
             
-            print(f'current_data = {current_position}')
+            print(f'current_data = {current_position}')     
             print(f'target_position_x = {target_position_x}, target_position_y = {target_position_y}')
             print(f'x绝对值 = {abs(current_position[0] - target_position_x)}')
             print(f'y绝对值 = {abs(current_position[1] - target_position_y)}')
             # 判断是否达到目标地点 
             if (abs(current_position[0] - target_position_x) < 0.05) and (abs(current_position[1] - target_position_y) < 0.05):
-                result = Go2Result()
                 result.final_position = current_position
                 self.server.set_succeeded(result)
                 break
-            else:
-                if abs(current_position[0] - target_position_x) < 0.05:
-                    self.vx = 0.0
-                
-                if abs(current_position[1] - target_position_y) < 0.05:
-                    self.vy = 0.0
+            if self.vy != 0 and abs(current_position[1] - target_position_y) < 0.05:
+                self.vy = 0.0
+                result.final_position = current_position
+                self.server.set_succeeded(result)
+                break
 
             rate.sleep()
-
-
 
     def unitree_move_thread(self):
         rate = rospy.Rate(10)  # 10 Hz, adjust as needed
@@ -97,23 +98,12 @@ class UnitreeGo2:
             if(self.vx + self.vy + self.vyaw) != 0.0 :   #速度不为0，并且停止所有运动
                 self.client.Move(self.vx, self.vy, self.vyaw)
                 rate.sleep()
-            # else:
-            #     rospy.loginfo("flag = %d", self.mode_change_flag)
-            #     if self.mode == 1 and self.client.StopMove() == 0 and self.mode_change_flag == 1:
-            #         while self.client.StandUp() != 0:
-            #             time.sleep(1)
-            #         self.mode_change_flag = 0
-
-            #     if self.mode == 0 and self.client.StopMove() == 0 and self.mode_change_flag == 1: 
-            #         while self.client.StandDown() != 0:
-            #             time.sleep(1)
-            #         self.mode_change_flag = 0
 
     def run(self):
         rospy.spin()
 
 if __name__ == '__main__':
-    ChannelFactoryInitialize(0, 'eno1')  # 改称网口名字
+    ChannelFactoryInitialize(0, 'eth0')  # 改称网口名字
 
     node = UnitreeGo2()
     node.run()
