@@ -19,7 +19,7 @@ class ArmController:
     def __init__(self):
         rospy.init_node('arm_controller', anonymous=True)
         rospy.loginfo("节点:arm_controller, 已启动!")
-
+        
         self.joints_pub = rospy.Publisher('/servo_controllers/port_id_1/multi_id_pos_dur', MultiRawIdPosDur, queue_size=1)
         self.arm_serve = rospy.Service('arm_serve', ArmCtrl, self.arm_serve_callback)
         #rospy.Subscriber("obj_pos", Point, self.obj_pos_callback)
@@ -84,7 +84,7 @@ class ArmController:
         self.processing = False  # 重置处理状态标志
 
     def arm_init(self):
-        self.AK.setPitchRangeMoving((-3, 0, 18), 0, -180, 180, 1000)
+        self.AK.setPitchRangeMoving((-3, 0, 18), 0, -180, 180, 3000)
         time.sleep(1)
         setBusServoPulse(1, 0, 500)  # 初始抓取位置
         time.sleep(1)
@@ -94,6 +94,7 @@ class ArmController:
         setBusServoPulse(1, 500, 500)  # 抓取动作
         time.sleep(1)
         rospy.loginfo("抓取动作完成")
+        # self.arm_init()
         # self.arm_init()
 
     def run(self):
