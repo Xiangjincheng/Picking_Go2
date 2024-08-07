@@ -31,10 +31,9 @@ class Yolov5Pred:
         weights = os.path.join(current_dir, "..", "yolov5_pak", "best_3_20.pt")
         self.model = attempt_load(weights , device=self.device, inplace=True, fuse=True)  # load model  
 
-        self.pitch_flag = True
-
-        rospy.Subscriber('camera_image', Image, self.rs_image_callback)
-
+        #rospy.Subscriber('camera_image', Image, self.rs_image_callback)
+        rospy.Subscriber('/camera/color/image_raw/compressed', Image, self.rs_image_callback)
+        
         self.publisher_pred_image = rospy.Publisher('pred_image', Image, queue_size = 10)
         self.publisher_rois = rospy.Publisher('region_of_interest', RegionOfInterest, queue_size = 10)
 
@@ -94,7 +93,7 @@ class Yolov5Pred:
         rospy.loginfo("Publishing rois with y_offset: %d" % roi.y_offset)
 
         return roi
-    
+
     def run(self):
         rospy.spin()
 

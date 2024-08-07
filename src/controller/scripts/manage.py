@@ -4,26 +4,45 @@ import numpy as np
 import time
 from cv_bridge import CvBridge
 import cv2
-from sensor_msgs.msg import  RegionOfInterest
+from sensor_msgs.msg import  RegionOfInterest, Image, CameraInfo
 from geometry_msgs.msg import Point
 from interfaces.srv import *
 #add action
 import actionlib
 from interfaces.msg import Go2Action, Go2Goal, Go2Feedback, Go2Result
+import pyrealsense2 as rs 
 import math
+
+def get_3d_camera_coordinate(depth_pixel, aligned_depth_frame, depth_intrin):
+    x = depth_pixel[0]
+    y = depth_pixel[1]
+    dis = aligned_depth_frame.get_distance(x, y)  # 获取该像素点对应的深度
+    # print ('depth: ',dis)       # 深度单位是m
+    camera_coordinate = rs.rs2_deproject_pixel_to_point(depth_intrin, depth_pixel, dis)
+    # print ('camera_coordinate: ',camera_coordinate)
+    print("3D检测输入的参数", "depth_pixel", depth_pixel, "aligned_depth_frame", aligned_depth_frame, 'depth_intrin',
+          depth_intrin)
+    print("在3D位姿检测当中的参数", "x", x, "y", y, "dis", dis, "camera_coordinate", camera_coordinate)
+    return dis, camera_coordinate
+
 
 class Manage:
     def __init__(self):
-        rospy.init_node('rois_to_point', anonymous=True)
-        rospy.loginfo("节点:rois_to_point, 已启动!")
+        rospy.init_node('manage_node', anonymous=True)
+        rospy.loginfo("节点:manage_node, 已启动!")
 
         self.stable_target = Point()
+        self.depth = Image()
+        self.intrinsics = rs.intrinsics()
         self.target_history = []
         self.error_threshold = 0.5
         self.history_length = 2
         self.bridge=CvBridge()
 
         rospy.Subscriber('region_of_interest', RegionOfInterest, self.rois_callback)     
+        rospy.Subscriber('/camera/aligned_depth_to_color/image_raw', Image, self.rs_depth_callback)
+        rospy.Subscriber('/camera/depth/camera_info', CameraInfo, self.intrinsics_callback)
+
         self.roi_to_point_client = rospy.ServiceProxy('roi_to_point_serve', RoiToPoint) 
         self.arm_client = rospy.ServiceProxy('arm_serve', ArmCtrl)
         
@@ -108,6 +127,22 @@ class Manage:
     def feedback_callback(self, feedback):
         pass
         rospy.loginfo("当前执行位置: x = %f, y = %f" % (feedback.current_position[0], feedback.current_position[1]))
+
+    def intrinsics_callback(self, msg):
+        self.intrinsics.width = msg.width
+        self.intrinsics.height = msg.height
+        self.intrinsics.ppx = msg.k[2]
+        self.intrinsics.ppy = msg.k[5]
+        self.intrinsics.fx = msg.k[0]
+        self.intrinsics.fy = msg.k[4]
+        if msg.distortion_model == 'plumb_bob':
+            self.intrinsics.model = rs.distortion.brown_conrady
+        elif msg.distortion_model == 'equidistant':
+            self.intrinsics.model = rs.distortion.kannala_brandt4
+        self.intrinsics.coeffs = [i for i in msg.d]
+
+    def rs_depth_callback(self, msg):
+        self.depth = msg
 
     def run(self):
         rospy.spin()
