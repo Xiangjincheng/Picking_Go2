@@ -9,22 +9,9 @@ from geometry_msgs.msg import Point
 from interfaces.srv import *
 #add action
 import actionlib
-from interfaces.msg import Go2Action, Go2Goal, Go2Feedback, Go2Result
+from interfaces.msg import Go2Action, Go2Goal, Go2Feedback, Go2Result, Rois
 import pyrealsense2 as rs 
 import math
-
-def get_3d_camera_coordinate(depth_pixel, aligned_depth_frame, depth_intrin):
-    x = depth_pixel[0]
-    y = depth_pixel[1]
-    dis = aligned_depth_frame.get_distance(x, y)  # 获取该像素点对应的深度
-    # print ('depth: ',dis)       # 深度单位是m
-    camera_coordinate = rs.rs2_deproject_pixel_to_point(depth_intrin, depth_pixel, dis)
-    # print ('camera_coordinate: ',camera_coordinate)
-    print("3D检测输入的参数", "depth_pixel", depth_pixel, "aligned_depth_frame", aligned_depth_frame, 'depth_intrin',
-          depth_intrin)
-    print("在3D位姿检测当中的参数", "x", x, "y", y, "dis", dis, "camera_coordinate", camera_coordinate)
-    return dis, camera_coordinate
-
 
 class Manage:
     def __init__(self):
@@ -39,11 +26,10 @@ class Manage:
         self.history_length = 2
         self.bridge=CvBridge()
 
-        rospy.Subscriber('region_of_interest', RegionOfInterest, self.rois_callback)     
+        rospy.Subscriber('region_of_interest', Rois, self.rois_callback)     
         rospy.Subscriber('/camera/aligned_depth_to_color/image_raw', Image, self.rs_depth_callback)
         rospy.Subscriber('/camera/depth/camera_info', CameraInfo, self.intrinsics_callback)
 
-        self.roi_to_point_client = rospy.ServiceProxy('roi_to_point_serve', RoiToPoint) 
         self.arm_client = rospy.ServiceProxy('arm_serve', ArmCtrl)
         
         # add action client
@@ -51,7 +37,24 @@ class Manage:
         self.go2_client.wait_for_server()
 
     def rois_callback(self, roi_msg):
-        if roi_msg.x_offset != 0:
+        if roi_msg.rois[0].x_offset != 0:
+            for e in roi_msg.rois:
+                mid_x=e.x_offset +e.width*0.5
+                mid_y=e.y_offset +e.height *0.5
+                mid_x=int(mid_x)
+                mid_y=int(mid_y)
+                depth_image = self.bridge.imgmsg_to_cv2(self.depth)
+                target = Point()
+                if depth_image[mid_y][mid_x] != 0:
+                    camera_coordinate = rs.rs2_deproject_pixel_to_point(self.intrinsics, [mid_x,mid_y], depth_image[mid_y][mid_x]/1000)
+                    target.x, target.y, target.z = camera_coordinate[0], camera_coordinate[1], camera_coordinate[2]
+                if self.check_target(target):
+                    rospy.wait_for_service('arm_serve')
+                    print(f"new stable_target = {self.stable_target}")
+                    response = self.arm_client(self.stable_target)     
+
+
+            '''
             rospy.wait_for_service('roi_to_point_serve')
             target = self.roi_to_point_client(roi_msg).target
             print(f'target = {target}')
@@ -59,7 +62,9 @@ class Manage:
                 stable_target = self.check_target_is_stable(target)
                 if stable_target.x != 0:
                     self.stable_target = stable_target
-                    self.go2_move([0, 0.35])
+                    self.go2_move([0, 0.35])   
+            '''
+
 
        # else:
        #     self.go2_move([0.35, 0])

@@ -1,12 +1,7 @@
 import rospy
-from sensor_msgs.msg import Image, RegionOfInterest
-
 import numpy as np
 import cv2
-from cv_bridge import CvBridge
 import torch 
-
-
 import sys
 import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -18,6 +13,9 @@ from utils.torch_utils import select_device
 from utils.augmentations import letterbox
 from utils.general import check_img_size, non_max_suppression
 
+from cv_bridge import CvBridge
+from sensor_msgs.msg import Image, RegionOfInterest
+from interfaces.msg import Rois
 
 class Yolov5Pred:
     def __init__(self):
@@ -35,7 +33,7 @@ class Yolov5Pred:
         rospy.Subscriber('/camera/color/image_raw/compressed', Image, self.rs_image_callback)
         
         self.publisher_pred_image = rospy.Publisher('pred_image', Image, queue_size = 10)
-        self.publisher_rois = rospy.Publisher('region_of_interest', RegionOfInterest, queue_size = 10)
+        self.publisher_rois = rospy.Publisher('region_of_interest', Rois, queue_size = 10)
 
     def rs_image_callback(self, color_image_msg): 
         color_image = self.bridge.imgmsg_to_cv2(color_image_msg, 'bgr8')
@@ -64,7 +62,7 @@ class Yolov5Pred:
             roi_msg = self.pred_to_roi(pred)
         else:
             result_img = color_image
-            roi_msg = RegionOfInterest()
+            roi_msg = Rois()
 
         pred_image_msg = self.bridge.cv2_to_imgmsg(result_img, "bgr8")
         self.publisher_pred_image.publish(pred_image_msg)     # publish predicted image
@@ -83,16 +81,15 @@ class Yolov5Pred:
         return img
 
     def pred_to_roi(self, pred):
-        target = pred[0]
-        roi = RegionOfInterest()
-        roi.x_offset = int(abs(target[0].item()))
-        roi.y_offset = int(abs(target[1].item()))
-        roi.width = int(target[2].item()-target[0].item())
-        roi.height = int(target[3].item()-target[1].item())
-        rospy.loginfo("Publishing rois with x_offset: %d" % roi.x_offset)
-        rospy.loginfo("Publishing rois with y_offset: %d" % roi.y_offset)
-
-        return roi
+        msg=Rois()
+        for e in pred:
+            m = RegionOfInterest()
+            m.x_offset = int(e[0].item())
+            m.y_offset = int(e[1].item())
+            m.width = int(e[2].item()-e[0].item())
+            m.height = int(e[3].item()-e[1].item())
+            msg.rois.append(m)
+        return msg
 
     def run(self):
         rospy.spin()

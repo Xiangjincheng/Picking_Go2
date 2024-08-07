@@ -53,8 +53,6 @@ class ArmController:
             
         responce.success = move_callback
         return responce
-    
-        
 
     def camera_trans_base(self, target_camera):
         print(target_camera)
