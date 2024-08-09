@@ -35,22 +35,12 @@ class ArmController:
         x_dis, y_dis, z_dis = self.camera_trans_base(np.array([obj_pos.x, obj_pos.y, obj_pos.z]))
         rospy.loginfo(f"接收到的目标物体坐标: x={x_dis}, y={y_dis}, z={z_dis}")
         move_callback = self.AK.setPitchRangeMoving((x_dis, y_dis, z_dis), 0, -180, 180, 1000)
-        print(move_callback)
-        time.sleep(3)
-        self.grab_object()
-        time.sleep(1)
-        self.AK.setPitchRangeMoving((-15,0,15), -135, -180, 180, 1000)
-        time.sleep(1)
-        self.AK.setPitchRangeMoving((15,0,15), 135, 0, 180, 1000)
-        time.sleep(1)
-        setBusServoPulse(1, 0, 500)
-        time.sleep(1)
-        self.AK.setPitchRangeMoving((-15,0,15), -135, -180, 0, 1000)
-        time.sleep(1)
-        self.arm_init()
+        time.sleep(2)
         if move_callback != False:
             move_callback = True
-            
+        if move_callback:
+            self.grab_object()
+        self.arm_init()
         responce.success = move_callback
         return responce
 
@@ -92,8 +82,15 @@ class ArmController:
         setBusServoPulse(1, 500, 500)  # 抓取动作
         time.sleep(1)
         rospy.loginfo("抓取动作完成")
-        # self.arm_init()
-        # self.arm_init()
+        time.sleep(1)
+        self.AK.setPitchRangeMoving((-15,0,15), -135, -180, 180, 1000)
+        time.sleep(1)
+        self.AK.setPitchRangeMoving((15,0,15), 135, 0, 180, 1000)
+        time.sleep(1)
+        setBusServoPulse(1, 0, 500)
+        time.sleep(1)
+        self.AK.setPitchRangeMoving((-15,0,15), -135, -180, 0, 1000)
+        time.sleep(1)
 
     def run(self):
         rospy.spin()
