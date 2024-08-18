@@ -94,6 +94,8 @@ class Yolov5Pred:
             m.width = int(e[2].item()-e[0].item())
             m.height = int(e[3].item()-e[1].item())
             msg.rois.append(m)
+            
+        msg.rois.sort(key=lambda roi: roi.x_offset)
         return msg
 
     def run(self):

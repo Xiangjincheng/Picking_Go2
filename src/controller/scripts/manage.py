@@ -26,6 +26,7 @@ class Manage:
         self.error_threshold = 0.5
         self.history_length = 2
         self.bridge=CvBridge()
+        self.is_moving = False
 
         rospy.Subscriber('region_of_interest', Rois, self.rois_callback)     
         rospy.Subscriber('/camera/aligned_depth_to_color/image_raw', Image, self.rs_depth_callback)
@@ -39,8 +40,12 @@ class Manage:
 
     def rois_callback(self, roi_msg):
         if len(roi_msg.rois) != 0:
-            self.go2_move_by_velocity(0.0, 0.0) 
+            self.go2_move_by_velocity(0.0, 0.0)
+            self.start_wait_timer() 
             for e in roi_msg.rois:
+                if self.is_moving:
+                    return
+                
                 mid_x=e.x_offset +e.width*0.5
                 mid_y=e.y_offset +e.height *0.5
                 mid_x=int(mid_x)
@@ -66,10 +71,10 @@ class Manage:
 
         else:
             self.go2_move_by_velocity(0.1, 0.0)   #vx, vy
+            self.is_moving = True
             
     def check_target(self, target):
         check_result = True
-
         if target is None:
             check_result = False
 
@@ -86,18 +91,35 @@ class Manage:
 
         return check_result
     
+    def start_wait_timer(self, action):
+        if action == 'go2':
+            self.wait_timer = rospy.Timer(rospy.Duration(2), lambda event: self.wait_timer_callback(event, action), oneshot=True)
+
+        if action == 'arm':
+            self.wait_timer = rospy.Timer(rospy.Duration(2), lambda event: self.wait_timer_callback(event, action), oneshot=True)
+
+
+    def wait_timer_callback(self, event, action):
+        if action == 'go2':
+            self.is_moving = False
+            
+        if action == 'arm':
+            self.is_moving = False
+
     def go2_move_by_line(self, move_position):
+        self.go2_client.wait_for_server() 
         rospy.loginfo(f"target_position = {move_position}") 
         self.goal = Go2Goal()
         target_position = move_position
         self.goal.target_position = target_position
         self.go2_client.send_goal(self.goal, self.result_callback, self.active_callback, self.feedback_callback)
+        self.is_moving = True
 
     def go2_move_by_velocity(self, v_x, v_y):
         highcmd = HighCmd()
         highcmd.velocity[0] = v_x
         highcmd.velocity[1] = v_y
-        self.go2_pub.publish(highcmd)
+        self.go2_pub.publish(highcmd)    
         rospy.loginfo(f"go2_pub.publish...{v_x, v_y}") 
 
     def active_callback(self):
@@ -107,6 +129,7 @@ class Manage:
     def result_callback(self, state, result):
         rospy.loginfo("初始位置: x = %f, y = %f" % (result.start_position[0], result.start_position[1]))
         rospy.loginfo("最终位置: x = %f, y = %f" % (result.final_position[0], result.final_position[1]))
+        self.start_wait_timer() 
             
     def feedback_callback(self, feedback):
         pass
