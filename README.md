@@ -2,8 +2,6 @@
 
 基于UnitreeGo2作为底盘的移动采摘系统
 
-<img src="./pic/picking_go2.jpg" alt="picking_go2" style="zoom: 33%;" />
-
 ## Branches：
 
 - **master**_最终代码分支_
@@ -86,3 +84,6 @@ export ROS_MASTER_URI=http://192.168.43.96:11311 #主机ip或名称
 # <<< ros_slave <<<
 ```
 
+## Show：
+
+<img src="./pic/picking_go2.jpg" alt="picking_go2" style="zoom: 33%;" />
