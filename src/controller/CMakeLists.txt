@@ -29,7 +29,6 @@ include_directories(
 catkin_install_python(PROGRAMS
   scripts/arm_controller.py
   scripts/unitree_go2.py
-  scripts/camera.py
   scripts/joystick.py
   scripts/yolov5_pred.py
   scripts/manage.py

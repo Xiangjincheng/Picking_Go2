@@ -1,41 +1,44 @@
-## JAKA_Unitree_Go2 Base Loongnix
+# Picking_Go2
 
-### dependences：
-[ROS_NOETIC on Loongarch64](./ros_noetic.md)
+基于UnitreeGo2作为底盘的移动采摘系统
 
-[RealSense](https://github.com/IntelRealSense/librealsense)
+<img src="/home/cheng/unitree_noetic/pic/picking_go2.jpg" alt="picking_go2" style="zoom: 33%;" />
 
+## Branches：
 
-### 机械臂使用
+- **master **_最终代码分支_
+- **dev** _普通双目摄像头开发分支_
+- **dev-rs** _realsense 摄像头开发分支_
 
-```python
-#引脚定义：
-	TX = TX3	#/dev/ttyS2 in loongnix
-	RX = RX3	#/dev/ttyS2 in loongnix
-	RX_EN_PIN = 50	#enable RX use gpio_50
-	TX_EN_PIN = 51	#enable RX use gpio_51
-```
+## Hardware：
 
-```python
-import time
-import Board	#$WORKSPACE/src/arm_bus_servo/Board.py
+Unitree-Go2、舵机机械臂、龙芯2k1000la、双目摄像头。
 
-while True:
-	# 参数：参数1：舵机id; 参数2：位置; 参数3：运行时间
-	# 舵机的转动范围0-240度，对应的脉宽为0-1000,即参数2的范围为0-1000
+## Software:
 
-	Board.setBusServoPulse(1, 800, 1000) # 6号舵机转到800位置，用时1000ms
-	time.sleep(0.5) # 延时0.5s
+Node list：
 
-	Board.setBusServoPulse(1, 200, 1000) # 6号舵机转到200位置，用时1000ms
-	time.sleep(0.5) # 延时0.5s
-	# for i in range(10):
-	# 	Board.setBusServoPulse(1, 800, 1000) # 6号舵机转到800位置，用时1000ms
-	# 	time.sleep(3) # 延时0.5s
-	# 	print(i)
-```
+1.  [arm_controller.py](src/controller/scripts/arm_controller.py) 机械臂控制节点
+2.  [joystick.py](src/controller/scripts/joystick.py) 手柄控制节点
+3.  [manage.py](src/controller/scripts/manage.py) 任务管理分配节点
+4.  [unitree_go2.py](src/controller/scripts/unitree_go2.py) Go2运动控制节点
+5.  [yolov5_pred.py](src/controller/scripts/yolov5_pred.py) YoloV5识别节点
 
-### Add Joystick (Microsoft X-Box 360 pad)
+Launch:
+
+1.  [controller.launch](src/controller/launch/controller.launch) 一键启动launch文件
+
+## Dependences：
+
+1. [ros_noetic](./ros_noetic.md) ROS1的noetic版本移植至loongarch64
+2. [realsense](https://github.com/IntelRealSense/librealsense) realsense驱动源码安装
+3. [armfpv](./src/controller/armfpv_sdk/armfpv.md) 幻尔机械臂sdk移植至龙芯2k1000la
+
+## Supplement：
+
+### 1.Add Joystick (Microsoft X-Box 360 pad)
+
+ROS手柄控制节点
 
 ```bash
 #安装noetic-joy *
@@ -65,7 +68,21 @@ rosrun go2_controller controller.py
 rosrun go2_controller x_box.py
 ```
 
-### ROS多机通信
+### 2.ROS多机通信
+
+首先通过网线连接，并设置主从机IP处于同一网段下，之后分别在主从机的~/.bashrc添加如下内容
+
 ```bash
-source ros_master
+# >>> ros_master >>> 主机
+export ROS_HOSTNAME=192.168.43.96 #主机IP或名称
+export ROS_MASTER_URI=http://192.168.43.96:11311 #主机ip或名称 
+# <<< ros_master <<<
 ```
+
+```bash
+# >>> ros_slave >>> 从机
+export ROS_HOSTNAME=192.168.43.136 #从机IP或名称
+export ROS_MASTER_URI=http://192.168.43.96:11311 #主机ip或名称
+# <<< ros_slave <<<
+```
+
