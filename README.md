@@ -6,7 +6,7 @@
 
 ## Branches：
 
-- **master **_最终代码分支_
+- **master**_最终代码分支_
 - **dev** _普通双目摄像头开发分支_
 - **dev-rs** _realsense 摄像头开发分支_
 
