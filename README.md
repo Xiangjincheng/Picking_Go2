@@ -2,7 +2,7 @@
 
 基于UnitreeGo2作为底盘的移动采摘系统
 
-<img src="./pic/picking_go2.jpg" alt="picking_go2" style="zoom: 33%;" />
+<img src="/home/cheng/unitree_noetic/pic/picking_go2.jpg" alt="picking_go2" style="zoom: 33%;" />
 
 ## Branches：
 
